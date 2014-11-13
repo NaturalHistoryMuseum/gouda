@@ -1,0 +1,2 @@
+class GoudaError(Exception):
+    pass

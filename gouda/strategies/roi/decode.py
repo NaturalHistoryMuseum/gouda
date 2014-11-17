@@ -33,7 +33,7 @@ class Decoder(object):
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         res = []
-        for i,r in enumerate(self._candidates):
+        for r in self._candidates:
             crop = img[r.y:(r.y+r.height), r.x:(r.x+r.width)]
 
             # Unsharp mask

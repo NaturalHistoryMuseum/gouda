@@ -22,16 +22,19 @@ class TestEngine(unittest.TestCase):
     """
     CODE128 = cv2.imread(str(TESTDATA / 'code128.png'))
     DATAMATRIX = cv2.imread(str(TESTDATA / 'datamatrix.png'))
+    NOBARCODE = cv2.imread(str(TESTDATA / 'nobarcode.png'))
 
     def _test_1d(self, engine, type='CODE128'):
         expected = [Barcode(type=type, data='Stegosaurus')]
         res = engine(self.CODE128)
         self.assertEqual(expected, res)
+        self.assertEqual([], engine(self.NOBARCODE))
 
     def _test_dm(self, engine, type='Data Matrix'):
         expected = [Barcode(type=type, data=u'Triceratops')]
         res = engine(self.DATAMATRIX)
         self.assertEqual(expected, res)
+        self.assertEqual([], engine(self.NOBARCODE))
 
 
 @unittest.skipUnless(AccusoftEngine.available(), 'AccusoftEngine unavailable')

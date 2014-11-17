@@ -36,10 +36,11 @@ def decode(paths, strategies, engine, reporter, read_greyscale):
                 reporter.result(p, [None, []])
             else:
                 for strategy in strategies:
-                    barcodes = strategy(img, engine)
-                    if barcodes:
+                    result = strategy(img, engine)
+                    if result:
                         break
-                reporter.result(p, barcodes)
+                reporter.result(p, result)
+
 
 class BasicReporter(object):
     def result(self, path, result):
@@ -98,7 +99,7 @@ def engine_choices():
 
     if InliteEngine.available():
         choices.update({'inlite-1d': partial(InliteEngine, datamatrix=False),
-                       'inlite-dm': partial(InliteEngine, datamatrix=True),
+                        'inlite-dm': partial(InliteEngine, datamatrix=True),
                       })
 
     if StecosEngine.available():

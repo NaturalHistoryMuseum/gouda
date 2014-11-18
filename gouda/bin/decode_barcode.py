@@ -21,25 +21,27 @@ from gouda.util import expand_wildcard, read_image
 from gouda.strategies import roi, resize
 
 
-def decode(paths, strategies, engine, reporter, read_greyscale):
+# TODO LH Visitor that copies file p to a new file for each decoded barcode
+#         value (see Chris' process)
+
+def decode(paths, strategies, engine, visitor, read_greyscale):
     """ Finds and decodes barcodes in the image at the given path.
     """
     for p in paths:
         if p.is_dir():
-            decode(p.iterdir(), strategies, engine, reporter, read_greyscale)
+            decode(p.iterdir(), strategies, engine, visitor, read_greyscale)
         else:
             # TODO LH Read greyscale affects decoders?
-            # TODO LH Read greyscale reduces memory requirements?
             # TODO LH Command-line argument for greyscale / colour
             img = read_image(p, read_greyscale)
             if img is None:
-                reporter.result(p, [None, []])
+                visitor.result(p, [None, []])
             else:
                 for strategy in strategies:
                     result = strategy(img, engine)
                     if result:
                         break
-                reporter.result(p, result)
+                visitor.result(p, result)
 
 
 class BasicReporter(object):

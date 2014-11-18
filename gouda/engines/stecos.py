@@ -27,8 +27,8 @@ class StecosEngine(object):
 
     @classmethod
     def available(cls):
-        return (cls.DMREAD and cls.DMREAD.is_file() and cls.READBAR and
-                cls.READBAR.is_file())
+        return (cls.DMREAD is not None and cls.DMREAD.is_file() and cls.READBAR
+                and cls.READBAR.is_file())
 
     def decode_file(self, path):
         dmtx = [str(self.command),

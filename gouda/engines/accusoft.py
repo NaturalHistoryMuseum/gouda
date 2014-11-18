@@ -41,7 +41,8 @@ class AccusoftEngine(object):
 
     @classmethod
     def available(cls):
-        return (com and is_clsid_registered(cls.IMAGE_READER_CLSID) and
+        return (com is not None and
+                is_clsid_registered(cls.IMAGE_READER_CLSID) and
                 is_clsid_registered(cls.DECODER_CLSID))
 
     def decode_file(self, path):

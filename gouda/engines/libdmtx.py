@@ -27,7 +27,7 @@ class LibDMTXEngine(object):
 
     @classmethod
     def available(cls):
-        return cls.DTMXREAD and cls.DTMXREAD.is_file()
+        return cls.DTMXREAD is not None and cls.DTMXREAD.is_file()
 
     def decode_file(self, path):
         dmtx = [str(self.DTMXREAD),

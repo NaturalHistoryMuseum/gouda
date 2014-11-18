@@ -77,7 +77,7 @@ class InliteEngine(object):
 
     @classmethod
     def available(cls):
-        return com and is_clsid_registered(cls.CLSID)
+        return com is not None and is_clsid_registered(cls.CLSID)
 
     def decode_file(self, path):
         self.d.Image.Open(str(path))

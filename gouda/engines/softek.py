@@ -172,7 +172,7 @@ class Win32SoftekEngine(object):
 
     @classmethod
     def available(cls):
-        return com and is_clsid_registered(cls.CLSID)
+        return com is not None and is_clsid_registered(cls.CLSID)
 
     def decode_file(self, path):
         self.d.ScanBarCode(str(path))
@@ -208,7 +208,7 @@ class POSIXSoftekEngine(object):
 
     @classmethod
     def available(cls):
-        return cls.BARDECODE and cls.BARDECODE.is_file()
+        return cls.BARDECODE is not None and cls.BARDECODE.is_file()
 
     def decode_file(self, path):
         args = [str(self.BARDECODE),

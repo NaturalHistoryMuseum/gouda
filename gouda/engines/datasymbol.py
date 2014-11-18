@@ -54,12 +54,12 @@ class DataSymbolEngine(object):
 
     @classmethod
     def available(cls):
-        return com and is_clsid_registered(cls.CLSID)
+        return com is not None and is_clsid_registered(cls.CLSID)
 
     def decode_file(self, path):
         # DecodeStream?
         self.d.DecodeFile(str(path))
-        res = [None] * self.d.Barcodes.length 
+        res = [None] * self.d.Barcodes.length
         for i in range(0, self.d.Barcodes.length):
             b = self.d.Barcodes.item(i)
             res[i] = Barcode(self.types.get(b.BarcodeType, 'Unknown'),

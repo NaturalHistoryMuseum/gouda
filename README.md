@@ -70,7 +70,14 @@ Windows only. Download and install their [SDK](http://www.datasymbol.com/).
 Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 ### libdmtx
-Tested on OS X and Linux only.
+Once you have installed, set `LIBDMTX_DTMXREAD` in `gouda/config.py`
+to the path to the `dmtxread` app provided with the SDK.
+
+#### Linux
+
+    sudo apt-get install libdmtx-dev libdmtx-utils
+
+#### OS X
 
     git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/libdmtx
     git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-utils
@@ -88,9 +95,6 @@ Tested on OS X and Linux only.
     make
 
     ./dmtxread/dmtxread -n -N1 Untitled.jpg
-
-Set `LIBDMTX_DTMXREAD` in `gouda/config.py` to the path to the `dmtxread` app
-provided with the SDK.
 
 The Python wrappers are not required by gouda (I have not investigated these)
 but you may wish to get them for completeness.
@@ -132,14 +136,16 @@ Alter the readDM and readbar programs to print decoded data in the form
 apps respectively, provided with the SDK.
 
 ### zbar
-The pip install of zbar on my Mac resulted in a segfault on `import zbar`.
-I compiled zbar from [source](http://zbar.sourceforge.net/).
+#### Linux without anaconda
 
-Linux:
+    sudo apt-get install libzbar-dev
+    pip install zbar
+
+#### Linux anaconda
 
     conda install --channel https://conda.binstar.org/weiyan zbar
 
-Windows:
+#### Windows
 
 It would be better to set include and link paths rather than copy files around.
 
@@ -148,6 +154,11 @@ It would be better to set include and link paths rather than copy files around.
 * Copy `C:\Program Files\ZBar\lib\libzbar.dll.a` to `C:\Users\<yourname>\appdata\Local\Continuum\Anaconda\libs\`
 * Copy dlls in `C:\Program Files\ZBar\bin` to `C:\Users\<yourname>\appdata\Local\Continuum\Anaconda\`
 * pip install zbar
+
+#### Mac
+
+The pip install of zbar on my Mac resulted in a segfault on `import zbar`.
+I compiled zbar-0.10.tar.bz2 from [source](http://zbar.sourceforge.net/download.html).
 
 ### zxing
 Install a JDK.

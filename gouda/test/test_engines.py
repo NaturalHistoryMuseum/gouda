@@ -115,7 +115,7 @@ class TestZbarEngine(TestEngine):
         self._test_1d(ZbarEngine())
 
 
-@unittest.skipUnless(ZxingEngine.available, 'ZxingEngine unavailable')
+@unittest.skipUnless(ZxingEngine.available(), 'ZxingEngine unavailable')
 class TestZxingEngine(TestEngine):
     def test_dm(self):
         self._test_dm(ZxingEngine())

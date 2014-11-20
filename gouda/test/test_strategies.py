@@ -5,6 +5,7 @@ from pathlib import Path
 from gouda.engines import InliteEngine, LibDMTXEngine, ZbarEngine, SoftekEngine
 from gouda.strategies import resize, roi
 
+
 import cv2
 
 
@@ -17,13 +18,13 @@ class TestStrategies(unittest.TestCase):
     # An engine that can read 1d barcodes
     ONED_ENGINE = ( (InliteEngine(False) if InliteEngine.available() else None) or
                     (ZbarEngine() if ZbarEngine.available() else None) or 
-                    (SoftekEngine() if SoftekEngine.available() else None)
+                    (SoftekEngine(False) if SoftekEngine.available() else None)
                   )
 
     # An engine that can read Data Matrix barcodes
     DM_ENGINE = ( (InliteEngine(True) if InliteEngine.available() else None) or
                   (LibDMTXEngine() if LibDMTXEngine.available() else None) or 
-                  (SoftekEngine() if SoftekEngine.available() else None)
+                  (SoftekEngine(True) if SoftekEngine.available() else None)
                 )
 
     def _test(self, file, engine, strategy, expected):

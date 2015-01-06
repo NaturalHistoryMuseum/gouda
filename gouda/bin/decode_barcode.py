@@ -79,7 +79,7 @@ class CSVReportVisitor(object):
     """Writes a CSV report
     """
     def __init__(self, engine, greyscale, file=sys.stdout):
-        self.w = csv.writer(file)
+        self.w = csv.writer(file, lineterminator='\n')
         self.w.writerow(['OS','Engine','Directory','File','Image.conversion',
                          'Elapsed','N.found','Values','Strategy'])
         self.engine = engine

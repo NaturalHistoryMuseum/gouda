@@ -43,7 +43,7 @@ class InliteEngine(object):
                 self.d.Directions = c.cibHorz | c.cibVert | c.cibDiag
 
         # Map values in EBarcodeType to text
-        # This would ideall be a class member but the enumeration
+        # This would ideally be a class member but the enumeration
         # is visible only after the call to EnsureDispatch.
         # TODO LH What is happening with Data Matrix barcodes? The control
         # returns a type of 30, which is not in EBarcodeType

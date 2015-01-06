@@ -29,4 +29,4 @@ def resize(img, engine):
             if barcodes:
                 return msg, barcodes
 
-    return []
+    return None

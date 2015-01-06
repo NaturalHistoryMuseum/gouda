@@ -66,6 +66,9 @@ Windows only. Download and install their [SDK](http://www.accusoft.com/).
 ### DataSymbol
 Windows only. Download and install their [SDK](http://www.datasymbol.com/).
 
+### DTK
+Windows only. Download and install their [SDK](http://www.dtksoft.com/barreader.php).
+
 ### Inlite
 Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 

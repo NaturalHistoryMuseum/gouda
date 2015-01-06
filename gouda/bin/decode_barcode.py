@@ -15,7 +15,7 @@ import cv2
 
 import gouda.util
 
-from gouda.engines import (AccusoftEngine, DataSymbolEngine,
+from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            InliteEngine, LibDMTXEngine, StecosEngine,
                            SoftekEngine, ZbarEngine, ZxingEngine)
 from gouda.gouda_error import GoudaError
@@ -138,6 +138,11 @@ def engine_choices():
 
     if DataSymbolEngine.available():
         choices['datasymbol-1d'] = partial(DataSymbolEngine, datamatrix=False)
+
+    if DTKEngine.available():
+        choices.update({'dtk-1d': partial(DTKEngine, datamatrix=False),
+                        'dtk-dm': partial(DTKEngine, datamatrix=True),
+                      })
 
     if InliteEngine.available():
         choices.update({'inlite-1d': partial(InliteEngine, datamatrix=False),

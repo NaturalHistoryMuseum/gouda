@@ -7,7 +7,7 @@ from pathlib import Path
 import cv2
 
 from gouda.barcode import Barcode
-from gouda.engines import (AccusoftEngine, DataSymbolEngine,
+from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            InliteEngine, LibDMTXEngine, SoftekEngine,
                            StecosEngine, ZbarEngine, ZxingEngine)
 
@@ -55,6 +55,15 @@ class TestDataSymbolEngine(TestEngine):
         self.assertEqual(1, len(res))
         self.assertEqual('Code 128', res[0].type)
         self.assertIn(res[0].data, ('StegosauDEMO', 'Stegosaurus'))
+
+
+@unittest.skipUnless(DTKEngine.available(), 'DTKEngine unavailable')
+class TestDTKEngine(TestEngine):
+    def test_1d(self):
+        self._test_1d(DTKEngine(datamatrix=False), type='Code 128')
+
+    def test_dm(self):
+        self._test_dm(DTKEngine(datamatrix=True))
 
 
 @unittest.skipUnless(InliteEngine.available(), 'InliteEngine unavailable')

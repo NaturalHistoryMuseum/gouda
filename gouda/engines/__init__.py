@@ -9,6 +9,7 @@
 
 from accusoft import AccusoftEngine
 from datasymbol import DataSymbolEngine
+from dtk import DTKEngine
 from libdmtx import LibDMTXEngine
 from inlite import InliteEngine
 from softek import SoftekEngine

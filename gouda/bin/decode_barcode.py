@@ -15,9 +15,10 @@ import cv2
 
 import gouda.util
 
-from gouda.engines import (AccusoftEngine, DataSymbolEngine,
+from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            InliteEngine, LibDMTXEngine, StecosEngine,
                            SoftekEngine, ZbarEngine, ZxingEngine)
+from gouda.gouda_error import GoudaError
 from gouda.util import expand_wildcard, read_image
 from gouda.strategies import roi, resize
 
@@ -54,7 +55,7 @@ def decode(paths, strategies, engine, visitors, read_greyscale):
                 traceback.print_exc()
 
 
-class BasicReporter(object):
+class BasicReportVisitor(object):
     """Writes a line-per-file and a line-per-barcode to stdout
     """
     def result(self, path, result):
@@ -65,7 +66,7 @@ class BasicReporter(object):
             print('[{0}] [{1}] [{2}]'.format(index, barcode.type, barcode.data))
 
 
-class TerseReporter(object):
+class TerseReportVisitor(object):
     """Writes a line-per-file to stdout
     """
     def result(self, path, result):
@@ -74,11 +75,11 @@ class TerseReporter(object):
         print(path, ' '.join(['[{0}]'.format(v) for v in values]))
 
 
-class CSVReporter(object):
+class CSVReportVisitor(object):
     """Writes a CSV report
     """
     def __init__(self, engine, greyscale, file=sys.stdout):
-        self.w = csv.writer(file)
+        self.w = csv.writer(file, lineterminator='\n')
         self.w.writerow(['OS','Engine','Directory','File','Image.conversion',
                          'Elapsed','N.found','Values','Strategy'])
         self.engine = engine
@@ -138,6 +139,11 @@ def engine_choices():
     if DataSymbolEngine.available():
         choices['datasymbol-1d'] = partial(DataSymbolEngine, datamatrix=False)
 
+    if DTKEngine.available():
+        choices.update({'dtk-1d': partial(DTKEngine, datamatrix=False),
+                        'dtk-dm': partial(DTKEngine, datamatrix=True),
+                      })
+
     if InliteEngine.available():
         choices.update({'inlite-1d': partial(InliteEngine, datamatrix=False),
                         'inlite-dm': partial(InliteEngine, datamatrix=True),
@@ -164,7 +170,7 @@ if __name__=='__main__':
 
     parser = argparse.ArgumentParser(description='Finds and decodes barcodes on images')
     parser.add_argument('--debug', '-v', action='store_true')
-    parser.add_argument('--report', '-r', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
+    parser.add_argument('--action', '-r', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
     parser.add_argument('--greyscale', '-g', action='store_true')
 
     choices = engine_choices()
@@ -180,15 +186,15 @@ if __name__=='__main__':
 
     engine = choices[args.engine]()
 
-    if 'csv'==args.report:
-        reporter = CSVReporter(args.engine, args.greyscale)
-    elif 'terse'==args.report:
-        reporter = TerseReporter()
-    elif 'rename'==args.report:
-        reporter = RenameReporter()
+    if 'csv'==args.action:
+        visitor = CSVReportVisitor(args.engine, args.greyscale)
+    elif 'terse'==args.action:
+        visitor = TerseReportVisitor()
+    elif 'rename'==args.action:
+        visitor = RenameReporter()
     else:
-        reporter = BasicReporter()
+        visitor = BasicReportVisitor()
 
     strategies = [resize, roi]
-    decode(expand_wildcard(args.image), strategies, engine, [reporter],
+    decode(expand_wildcard(args.image), strategies, engine, [visitor],
            args.greyscale)

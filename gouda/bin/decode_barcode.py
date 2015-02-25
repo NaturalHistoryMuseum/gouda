@@ -170,7 +170,7 @@ if __name__=='__main__':
 
     parser = argparse.ArgumentParser(description='Finds and decodes barcodes on images')
     parser.add_argument('--debug', '-v', action='store_true')
-    parser.add_argument('--action', '-r', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
+    parser.add_argument('--action', '-a', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
     parser.add_argument('--greyscale', '-g', action='store_true')
 
     choices = engine_choices()

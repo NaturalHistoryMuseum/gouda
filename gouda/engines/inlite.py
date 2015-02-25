@@ -28,8 +28,10 @@ class InliteEngine(object):
         if not self.available():
             raise GoudaError('Inlite unavailable')
         else:
-            # Tip from SO about how to access COM constants
-            # http://stackoverflow.com/questions/21465810/accessing-enumaration-constants-in-excel-com-using-python-and-win32com
+            com.pythoncom.CoInitialize()
+
+            # Tip from stackoverflow about how to access COM constants
+            # http://stackoverflow.com/a/21534997/1773758
             self.ci = com.gencache.EnsureDispatch(self.CLSID)
 
             if datamatrix:

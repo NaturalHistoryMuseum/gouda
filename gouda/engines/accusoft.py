@@ -30,8 +30,10 @@ class AccusoftEngine(object):
         if not self.available():
             raise GoudaError('Accusoft unavailable')
         else:
-            # Tip from SO about how to access COM constants
-            # http://stackoverflow.com/questions/21465810/accessing-enumaration-constants-in-excel-com-using-python-and-win32com
+            com.pythoncom.CoInitialize()
+
+            # Tip from stackoverflow about how to access COM constants
+            # http://stackoverflow.com/a/21534997/1773758
             self.ie = com.gencache.EnsureDispatch(self.IMAGE_READER_CLSID)
             self.be = com.gencache.EnsureDispatch(self.DECODER_CLSID)
             if datamatrix:

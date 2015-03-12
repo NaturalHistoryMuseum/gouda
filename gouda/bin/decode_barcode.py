@@ -81,15 +81,15 @@ class CSVReportVisitor(object):
     def __init__(self, engine, greyscale, file=sys.stdout):
         self.w = csv.writer(file, lineterminator='\n')
         self.w.writerow(['OS','Engine','Directory','File','Image.conversion',
-                         'Elapsed','N.found','Values','Strategy'])
+                         'Elapsed','N.found','Types','Values','Strategy'])
         self.engine = engine
         self.image_conversion = 'Greyscale' if greyscale else 'Unchanged'
         self.start_time = time.time()
 
     def result(self, path, result):
         strategy, barcodes = result
-        decoded = [u'[{0}:{1}]'.format(b.type, b.data) for b in barcodes]
-        decoded = u' '.join(decoded)
+        types = '|'.join(b.type for b in barcodes)
+        values = '|'.join(b.data for b in barcodes)
         self.w.writerow([sys.platform,
                          self.engine,
                          path.parent.name,
@@ -97,7 +97,8 @@ class CSVReportVisitor(object):
                          self.image_conversion,
                          time.time()-self.start_time,
                          len(barcodes),
-                         decoded,
+                         types,
+                         values,
                          strategy])
 
 class RenameReporter(object):

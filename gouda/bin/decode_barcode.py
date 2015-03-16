@@ -138,7 +138,9 @@ def engine_choices():
                       })
 
     if DataSymbolEngine.available():
-        choices['datasymbol-1d'] = partial(DataSymbolEngine, datamatrix=False)
+        choices.update({'datasymbol-1d': partial(DataSymbolEngine, datamatrix=False),
+                        'datasymbol-dm': partial(DataSymbolEngine, datamatrix=True),
+                      })
 
     if DTKEngine.available():
         choices.update({'dtk-1d': partial(DTKEngine, datamatrix=False),

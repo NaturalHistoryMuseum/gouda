@@ -75,6 +75,13 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 ### libdmtx
 
+Solutoins using `pydmtx` and `dmtxread` have been coded into gouda. The former
+is more desirable because it makes freezing possible but the `pydtmx` solution
+behaves poorly, so gouda currently uses `dmtxread`. More investigation required.
+
+On all OSes, once you have installed dmtxread, set `LIBDMTX_DTMXREAD` in 
+`gouda/config.py` to the path to `dmtxread`.
+
 #### Windows
 
 Build Release target of libdmtx
@@ -92,8 +99,7 @@ Run
 
     python setup.py install
 
-Once you have installed, set `LIBDMTX_DTMXREAD` in `gouda/config.py`
-to the path to the `dmtxread` app provided with the SDK.
+TODO `dmtxread` instructions.
 
 #### Linux
 
@@ -140,8 +146,6 @@ Python lib
     cd python
     python setup.py install
     python -c "import pydmtx; print(pydmtx)"
-
-Utils not required by gouda but you may wish to get them for completeness.
 
     cd ../libdmtx-dmtx-utils
     brew install imagemagick

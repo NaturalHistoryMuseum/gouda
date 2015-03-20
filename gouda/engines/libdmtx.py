@@ -4,6 +4,9 @@ import tempfile
 from pathlib import Path
 
 import cv2
+import numpy as np
+
+from PIL import Image
 
 from gouda import config
 from gouda.barcode import Barcode
@@ -15,11 +18,9 @@ try:
 except ImportError:
     DataMatrix = None
 
-
-# WrapperLibDMTXEngine is preferred but raises error message:
-# "TypeError: expected a single-segment buffer object"
-# when called from Inselect.
-
+# Two interfaces to libdmtx - WrapperLibDMTXEngine uses pydmtx
+# SubprocessLibDMTXEngine uses the dmtxread command-line tool
+# WrapperLibDMTXEngine preferred - both kept here for reference
 
 class WrapperLibDMTXEngine(object):
     """Decode Data Matrix barcodes using the libdmtx decoder via pydmtx
@@ -37,12 +38,29 @@ class WrapperLibDMTXEngine(object):
         return self(cv2.imread(str(path)))
 
     def __call__(self, img):
-        d = DataMatrix()
-        x = d.decode(img.shape[1], img.shape[0], img)
+        d = DataMatrix(timeout=300, max_count=1)
+
+        # Different ways to format image for passing to d.decode. The
+        # commented-out methods are kept here for reference.
+
+        # 1. cv matrix of np.ndarray
+        # http://stackoverflow.com/a/19341140/1773758
+        # img = cv2.cv.fromarray(img)
+        # res = d.decode(img.width, img.height, buffer(img.tostring()))
+
+        # 2. np.ndarray
+        # res = d.decode(img.shape[1], img.shape[0], img)
+
+        # 3. PIL RGB image from BGR np.ndarray
+        # http://stackoverflow.com/a/4661652/1773758
+        img = Image.fromarray(np.roll(img, 1, axis=-1))
+        res = d.decode( img.size[0], img.size[1], buffer(img.tostring()) )
+
         res = [None] * d.count()
         for i in xrange(0, d.count()):
             res[i] = Barcode('Data Matrix', d.message(1+i))
         return res
+
 
 class SubprocessLibDMTXEngine(object):
     """Decode Data Matrix barcodes using the libdmtx decoder via dmtxread
@@ -90,6 +108,5 @@ class SubprocessLibDMTXEngine(object):
             cv2.imwrite(img_temp.name, img)
             return self.decode_file(img_temp.name)
 
-# Use the more reliable but less elegant solution
-
-LibDMTXEngine = SubprocessLibDMTXEngine
+# Use the more more elegant and flexible solution
+LibDMTXEngine = WrapperLibDMTXEngine

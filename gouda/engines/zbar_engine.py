@@ -43,6 +43,4 @@ https://pypi.python.org/pypi/zbar
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         image = zbar.Image(width, height, 'Y800', img.tostring())
         scanner.scan(image)
-
-        # TODO LH Return coordinates
         return [Barcode(str(s.type), unicode(s.data, 'utf8')) for s in image]

@@ -67,29 +67,81 @@ Windows only. Download and install their [SDK](http://www.accusoft.com/).
 Windows only. Download and install their [SDK](http://www.datasymbol.com/).
 
 ### DTK
-Windows only. Download and install their [SDK](http://www.dtksoft.com/barreader.php).
+Windows 32-bit only. You must run 32-bit Python.
+Download and install their [SDK](http://www.dtksoft.com/barreader.php).
 
 ### Inlite
 Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 ### libdmtx
+
+#### Windows
+
+Build Release target of libdmtx
+
+    cd "C:\Users\Lawrence\Documents\Visual Studio 2013\Projects\libdmtx-dmtx-wrappers\python"
+
+Alter setup.py
+    mod = Extension( '_pydmtx',
+                     include_dirs = ['../../libdmtx/libdmtx'],
+                     library_dirs = ['../../libdmtx/Release',],
+                     libraries = ['dmtx'],
+                     sources = ['pydmtxmodule.c'] )
+
+Run
+
+    python setup.py install
+
 Once you have installed, set `LIBDMTX_DTMXREAD` in `gouda/config.py`
 to the path to the `dmtxread` app provided with the SDK.
 
 #### Linux
 
+Library and utils
+
     sudo apt-get install libdmtx-dev libdmtx-utils
+
+Python lib
+
+    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers
+
+    cd dmtx-wrappers/
+    ./autogen.sh
+    ./configure
+    make
+
+    cd python
+    python setup.py install
+    python -c "import pydmtx; print(pydmtx)"
 
 #### OS X
 
+Source
+
     git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/libdmtx
+    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers
     git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-utils
+
+Library
 
     cd libdmtx
     ./autogen.sh
     ./configure
     make
     make install
+
+Python lib
+
+    cd ../dmtx-wrappers/
+    ./autogen.sh
+    ./configure
+    make
+
+    cd python
+    python setup.py install
+    python -c "import pydmtx; print(pydmtx)"
+
+Utils not required by gouda but you may wish to get them for completeness.
 
     cd ../libdmtx-dmtx-utils
     brew install imagemagick
@@ -99,25 +151,7 @@ to the path to the `dmtxread` app provided with the SDK.
 
     ./dmtxread/dmtxread -n -N1 Untitled.jpg
 
-The Python wrappers are not required by gouda (I have not investigated these)
-but you may wish to get them for completeness.
-
-    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers
-
-    cd ../dmtx-wrappers/
-    ./autogen.sh
-    ./configure
-    make
-
-    cd python
-    ./autogen.sh
-    ./configure
-    make
-    python setup.py install
-    python -c "import pydmtx; print(pydmtx)"
-
-
-## Softek
+### Softek
 Linux, OS X and Windows.
 Download and install their [SDK](http://www.bardecode.com/).
 
@@ -149,17 +183,15 @@ apps respectively, provided with the SDK.
     conda install --channel https://conda.binstar.org/weiyan zbar
 
 #### Windows
+32-bit only. You must follow these instructions using 32-bit Python.
 
-It would be better to set include and link paths rather than copy files around.
+Download and run the `zbar-0.10` [windows installer](http://zbar.sourceforge.net/download.html); 
+check 'Development Headers and Libraries'. Modify your `PATH` to include
+`C:\Program Files (x86)\ZBar\bin`
 
-* Download and run the `zbar-0.10` [windows installer](http://zbar.sourceforge.net/download.html)
-* Copy contents of `C:\Program Files\ZBar\include to `C:\Users\<yourname>\appdata\Local\Continuum\Anaconda\include\`
-* Copy `C:\Program Files\ZBar\lib\libzbar.dll.a` to `C:\Users\<yourname>\appdata\Local\Continuum\Anaconda\libs\`
-* Copy dlls in `C:\Program Files\ZBar\bin` to `C:\Users\<yourname>\appdata\Local\Continuum\Anaconda\`
-* pip install zbar
+    pip install --global-option=build_ext --global-option="-IC:/Program Files (x86)/ZBar/include" --global-option="-LC:/Program Files (x86)/ZBar/lib" zbar
 
 #### Mac
-
 The pip install of zbar on my Mac resulted in a segfault on `import zbar`.
 I compiled zbar-0.10.tar.bz2 from [source](http://zbar.sourceforge.net/download.html).
 
@@ -169,11 +201,9 @@ Install a JDK.
     cd gouda/java/decode_data_matrix/
     ./build.sh
 
-
 ## Test
 
     python -m unittest discover
-
 
 ## Examples
 Print values of all 1d (Code 128) barcodes using the zbar library:

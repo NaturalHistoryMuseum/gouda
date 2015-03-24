@@ -54,6 +54,8 @@ class WrapperLibDMTXEngine(object):
         # 3. PIL RGB image from BGR np.ndarray
         # http://stackoverflow.com/a/4661652/1773758
         img = Image.fromarray(np.roll(img, 1, axis=-1))
+        img = img.convert('RGB')
+
         res = d.decode( img.size[0], img.size[1], buffer(img.tostring()) )
 
         res = [None] * d.count()

@@ -24,7 +24,7 @@ class ZxingEngine(object):
     JARS = ['zxing/core-3.1.0.jar',
             'zxing/javase-3.1.0.jar',
             'decode_data_matrix/decode_data_matrix.jar']
-    JARS = [(java.JAR_PATH / p).resolve() for p in JARS]
+    JARS = [java.JAR_PATH / p for p in JARS]
 
     def __init__(self):
         if not self.available():
@@ -41,7 +41,7 @@ class ZxingEngine(object):
             args = [str(java.JAVA),
                     '-cp', os.pathsep.join(map(str, self.JARS)),
                     'decode_data_matrix',
-                    str(Path(path).resolve())]
+                    str(path)]
             dmtxread = subprocess.Popen(args,
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)

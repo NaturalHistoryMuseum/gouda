@@ -1,3 +1,4 @@
+import os
 import subprocess
 import tempfile
 
@@ -23,7 +24,7 @@ class ZxingEngine(object):
     JARS = ['zxing/core-3.1.0.jar',
             'zxing/javase-3.1.0.jar',
             'decode_data_matrix/decode_data_matrix.jar']
-    JARS = [java.JAR_PATH / p for p in JARS]
+    JARS = [(java.JAR_PATH / p).resolve() for p in JARS]
 
     def __init__(self):
         if not self.available():
@@ -38,9 +39,9 @@ class ZxingEngine(object):
             raise GoudaError('zxing unavailable')
         else:
             args = [str(java.JAVA),
-                    '-cp', ':'.join(map(str, self.JARS)),
+                    '-cp', os.pathsep.join(map(str, self.JARS)),
                     'decode_data_matrix',
-                    str(path)]
+                    str(Path(path).resolve())]
             dmtxread = subprocess.Popen(args,
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)
@@ -53,7 +54,12 @@ class ZxingEngine(object):
                 return [Barcode('Data Matrix', l) for l in stdoutdata]
 
     def __call__(self, img):
-        with tempfile.NamedTemporaryFile(suffix='.png') as img_temp:
+        img_temp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+        try:
             debug_print('Writing temp file [{0}] for zxing'.format(img_temp.name))
             cv2.imwrite(img_temp.name, img)
             return self.decode_file(img_temp.name)
+        finally:
+            # TODO LH Logic here?
+            img_temp.close()
+            os.unlink(img_temp.name)

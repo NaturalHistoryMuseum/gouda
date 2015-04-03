@@ -94,14 +94,9 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 #### Windows
 
 Download and install the appropriate build of `pydmtx` from
-[dmtx-wrapper](https://github.com/NaturalHistoryMuseum/dmtx-wrappers/).
-If you installed 32-bit Anaconda:
+[dmtx-wrapper](https://github.com/NaturalHistoryMuseum/dmtx-wrappers/):
 
-    pip install pydmtx-0.7.4-cp27-none-win32.whl
-
-If you installed 64-bit Anaconda:
-
-    pip install pydmtx-0.7.4-cp27-none-win_amd64.whl
+    pip install pydmtx-<whatever>.whl
 
 Test
 

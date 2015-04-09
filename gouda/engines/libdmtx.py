@@ -26,9 +26,12 @@ class WrapperLibDMTXEngine(object):
     """Decode Data Matrix barcodes using the libdmtx decoder via pydmtx
     """
 
-    def __init__(self):
+    def __init__(self, timeout_ms=300, max_count=1):
         if not self.available():
             raise GoudaError('libdmtx unavailable')
+
+        self.timeout_ms = timeout_ms
+        self.max_count = max_count
 
     @classmethod
     def available(cls):
@@ -38,25 +41,14 @@ class WrapperLibDMTXEngine(object):
         return self(cv2.imread(str(path)))
 
     def __call__(self, img):
-        d = DataMatrix(timeout=300, max_count=1)
+        d = DataMatrix(timeout=self.timeout_ms, max_count=self.max_count)
 
-        # Different ways to format image for passing to d.decode. The
-        # commented-out methods are kept here for reference.
-
-        # 1. cv matrix of np.ndarray
-        # http://stackoverflow.com/a/19341140/1773758
-        # img = cv2.cv.fromarray(img)
-        # res = d.decode(img.width, img.height, buffer(img.tostring()))
-
-        # 2. np.ndarray
-        # res = d.decode(img.shape[1], img.shape[0], img)
-
-        # 3. PIL RGB image from BGR np.ndarray
+        # PIL RGB image from BGR np.ndarray
         # http://stackoverflow.com/a/4661652/1773758
         img = Image.fromarray(np.roll(img, 1, axis=-1))
         img = img.convert('RGB')
 
-        res = d.decode( img.size[0], img.size[1], buffer(img.tostring()) )
+        res = d.decode(img.size[0], img.size[1], buffer(img.tostring()))
 
         res = [None] * d.count()
         for i in xrange(0, d.count()):

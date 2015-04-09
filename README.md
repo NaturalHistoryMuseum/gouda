@@ -45,6 +45,10 @@ If strategy A finds no barcodes, strategy B is attempted.
 The easiest way is to install the current Python 2.7 release of
 [Anaconda](https://store.continuum.io/cshop/anaconda/):
 
+    conda update --all
+    conda update --all
+    pip install --upgrade pip
+    python <Anaconda dir>\Scripts\pywin32_postinstall.py -install
     pip install -r requirements.txt
 
 ## Install [OpenCV](http://www.opencv.org/)
@@ -57,7 +61,19 @@ OS X
     conda install -c https://conda.binstar.org/jjhelmus opencv
 
 Windows
-    Download and install [OpenCV 2.4.9](http://opencv.org/)
+
+Download [OpenCV 2.4.10](http://opencv.org/) and extract to c:\opencv\
+If you installed 32-bit Anaconda:
+
+    copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Users\lawh\Anaconda\DLLs`
+
+If you installed 64-bit Anaconda:
+
+    copy C:\opencv\build\python\2.7\x64\cv2.pyd C:\Users\lawh\Anaconda\DLLs`
+
+Test by start Anaconda prompt and running
+
+    python -c "import cv2; print cv2"
 
 ## Install decoders
 ### Accusoft
@@ -77,22 +93,14 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 #### Windows
 
-TODO LH to fork libdmtx and add Visual Studio DLL project, with 32-bit and
-64-bit targets. Build Release target of libdmtx.
+Download and install the appropriate build of `pydmtx` from
+[dmtx-wrapper](https://github.com/NaturalHistoryMuseum/dmtx-wrappers/):
 
-    cd "C:\Users\Lawrence\Documents\Visual Studio 2013\Projects\libdmtx-dmtx-wrappers\python"
+    pip install pydmtx-<whatever>.whl
 
-Alter `include_dirs` and `library_dirs` in setup.py
+Test
 
-    mod = Extension( '_pydmtx',
-                     include_dirs = ['../../libdmtx/libdmtx'],
-                     library_dirs = ['../../libdmtx/Release',],
-                     libraries = ['dmtx'],
-                     sources = ['pydmtxmodule.c'] )
-
-Run
-
-    python setup.py install
+    python -c "import pydmtx; print(pydmtx)"
 
 #### Linux
 
@@ -103,15 +111,10 @@ Library and utils
 Python lib
 
     git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers
-
-    cd dmtx-wrappers/
-    ./autogen.sh
-    ./configure
-    make
-
-    cd python
+    cd dmtx-wrappers/python
     python setup.py install
     python -c "import pydmtx; print(pydmtx)"
+    python test.py
 
 #### OS X
 
@@ -124,6 +127,7 @@ Source
 Library
 
     cd libdmtx
+    git checkout v0.7.4
     ./autogen.sh
     ./configure
     make
@@ -140,15 +144,14 @@ Python lib
     python setup.py install
     python -c "import pydmtx; print(pydmtx)"
 
-Command-line tool
+Command-line tools (not used but might be useful to you)
 
-    cd ../libdmtx-dmtx-utils
+    cd ../dmtx-utils
     brew install imagemagick
+    git checkout v0.7.4
     ./autogen.sh
     ./configure
     make
-
-    ./dmtxread/dmtxread -n -N1 Untitled.jpg
 
 ### Softek
 Linux, OS X and Windows.

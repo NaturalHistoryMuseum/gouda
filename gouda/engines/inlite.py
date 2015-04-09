@@ -45,10 +45,8 @@ class InliteEngine(object):
                 self.d.Directions = c.cibHorz | c.cibVert | c.cibDiag
 
         # Map values in EBarcodeType to text
-        # This would ideally be a class member but the enumeration
-        # is visible only after the call to EnsureDispatch.
-        # TODO LH What is happening with Data Matrix barcodes? The control
-        # returns a type of 30, which is not in EBarcodeType
+        # This should be a class member but the enumeration is visible only
+        # after the call to EnsureDispatch.
         self.types = { c.cibf4State : 'PostBar / CPC 4-State',
                        c.cibfAddon2 : 'Addon-2',
                        c.cibfAddon5 : 'Addon-5',

@@ -19,12 +19,12 @@ class DataSymbolEngine(object):
     """Decode using the DataSymbol's BarcodeReader SDK
 
     BarcodeReader can decode many types of barcodes - currently using it just
-    for Data Matrix and Code 128
+    for Data Matrix and Code 128 + Code 129
     """
 
     CLSID = "BarcodeReader.BarcodeDecoder"
 
-    def __init__(self, datamatrix):
+    def __init__(self, datamatrix, n_barcodes=None):
         if not self.available():
             raise GoudaError('Data Symbol unavailable')
         else:
@@ -33,15 +33,19 @@ class DataSymbolEngine(object):
             # Tip from stackoverflow about how to access COM constants
             # http://stackoverflow.com/a/21534997/1773758
             self.d = com.gencache.EnsureDispatch(self.CLSID)
+
             if datamatrix:
-                # TODO LH Causes python crash
                 self.d.BarcodeTypes = c.DataMatrix
             else:
                 self.d.BarcodeTypes = c.Code128 | c.Code39
 
+            if n_barcodes is None:
+                n_barcodes = 1 if datamatrix else 10
+            self.d.LinearFindBarcodes = n_barcodes
+
         # Map values in EBarcodeTypes to text
-        # This would ideall be a class member but the enumeration
-        # is visible only after the call to EnsureDispatch.
+        # This should be a class member but the enumeration is visible only
+        # after the call to EnsureDispatch.
         self.types = { c.Code128 : 'Code 128',
                        c.Code39 : 'Code 39',
                        c.Interl25 : 'Interleaved 2 of 5',

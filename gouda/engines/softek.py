@@ -28,11 +28,11 @@ class Win32SoftekEngine(object):
     for Data Matrix and Code 128
     """
 
-    CLSID = "SoftekATL.Barcode"
+    CLSID = "SoftekBarcodeCOM.Barcode"
 
     def __init__(self, datamatrix):
         if not self.available():
-            raise GoudaError('Inlite unavailable')
+            raise GoudaError('Softek unavailable')
         else:
             com.pythoncom.CoInitialize()
 

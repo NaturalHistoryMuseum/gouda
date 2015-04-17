@@ -162,6 +162,14 @@ to the `bardecode` app provided with the SDK.
 
 Enter your licence key in `SOFTEK_LICENSE_KEY` in `gouda/config.py`.
 
+#### Windows
+
+You may need to install the
+[Visual C++ Redistributable Packages for Visual Studio 2013](http://www.microsoft.com/en-us/download/confirmation.aspx?id=40784)
+before registering the COM controls.
+
+You may need to use 'Run As Administrator' when registering the controls.
+
 ### Stecos
 Tested on OS X only. Download and install their [SDK](http://www.stecos.net/).
 

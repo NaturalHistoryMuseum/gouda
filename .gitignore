@@ -8,3 +8,5 @@ dist/
 htmlcov
 setup.cfg
 gouda/config_dev.py
+cover
+

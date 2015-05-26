@@ -20,7 +20,8 @@ from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            SoftekEngine, ZbarEngine, ZxingEngine)
 from gouda.gouda_error import GoudaError
 from gouda.util import expand_wildcard, read_image
-from gouda.strategies import roi, resize
+from gouda.strategies.roi import roi
+from gouda.strategies.resize import resize
 
 
 # TODO LH Visitor that copies file p to a new file for each decoded barcode

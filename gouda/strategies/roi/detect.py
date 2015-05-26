@@ -97,6 +97,7 @@ class Detector(object):
                            'thresh':thresh,
                            'closing':closing,
                          }
-        # TODO LH Use normalised rects
-        candidates = [Rect(cv2.boundingRect(c)) for c in contours]
+
+        candidates = [cv2.boundingRect(c) for c in contours]
+        candidates = [Rect(x, y, width, height) for x, y, width, height in candidates]
         return (working_images, candidates)

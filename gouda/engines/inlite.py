@@ -19,13 +19,13 @@ class InliteEngine(object):
     """Decode using the Inline ClearImage SDK
 
     __init__ takes an argument 'format' which should be one of 'datamatrix',
-    '1d', 'qr' and 'pdf417'
+    '1d', 'qrcode' and 'pdf417'
     """
 
     CLSID = "ClearImage.ClearImage"
 
     def __init__(self, format):
-        choices = ('1d', 'datamatrix', 'pdf417', 'qr')
+        choices = ('1d', 'datamatrix', 'pdf417', 'qrcode')
         if not self.available():
             raise GoudaError('Inlite unavailable')
         elif format not in choices:
@@ -73,7 +73,7 @@ class InliteEngine(object):
                            c.cibPdf417 : 'PDF 417',
                            c.cibPlanet : 'Planet',
                            c.cibfPostnet : 'Postnet or Planet',
-                           c.cibQR : 'QR',
+                           c.cibQR : 'QR Code',
                            c.cibSingaporePost : 'Singapore Post',
                            c.cibfUcc128 : 'UCC-128',
                            c.cibfUpca : 'UPC-A',

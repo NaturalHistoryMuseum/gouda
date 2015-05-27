@@ -22,6 +22,8 @@ class TestEngine(unittest.TestCase):
     """
     CODE128 = cv2.imread(str(TESTDATA / 'code128.png'))
     DATAMATRIX = cv2.imread(str(TESTDATA / 'datamatrix.png'))
+    QRCODE = cv2.imread(str(TESTDATA / 'qrcode.png'))
+    PDF417 = cv2.imread(str(TESTDATA / 'pdf417.png'))
     NOBARCODE = cv2.imread(str(TESTDATA / 'nobarcode.png'))
 
     def _test_1d(self, engine, type='CODE128'):
@@ -33,6 +35,18 @@ class TestEngine(unittest.TestCase):
     def _test_dm(self, engine, type='Data Matrix'):
         expected = [Barcode(type=type, data=u'Triceratops')]
         res = engine(self.DATAMATRIX)
+        self.assertEqual(expected, res)
+        self.assertEqual([], engine(self.NOBARCODE))
+
+    def _test_qr(self, engine, type='QR Code'):
+        expected = [Barcode(type=type, data=u'Thalassiodracon')]
+        res = engine(self.QRCODE)
+        self.assertEqual(expected, res)
+        self.assertEqual([], engine(self.NOBARCODE))
+
+    def _test_pdf417(self, engine, type='PDF 417'):
+        expected = [Barcode(type=type, data=u'Metasequoia')]
+        res = engine(self.PDF417)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
@@ -73,6 +87,12 @@ class TestInliteEngine(TestEngine):
 
     def test_dm(self):
         self._test_dm(InliteEngine(format='datamatrix'))
+
+    def test_qr(self):
+        self._test_qr(InliteEngine(format='qrcode'))
+
+    def test_pdf417(self):
+        self._test_pdf417(InliteEngine(format='pdf417'))
 
 
 @unittest.skipUnless(LibDMTXEngine.available(), 'LibDMTXEngine unavailable')
@@ -122,6 +142,9 @@ class TestStecosEngine(TestEngine):
 class TestZbarEngine(TestEngine):
     def test_1d(self):
         self._test_1d(ZbarEngine())
+
+    def test_qr(self):
+        self._test_qr(ZbarEngine(), type='QRCODE')
 
 
 @unittest.skipUnless(ZxingEngine.available(), 'ZxingEngine unavailable')

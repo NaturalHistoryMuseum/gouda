@@ -16,13 +16,13 @@ class TestStrategies(unittest.TestCase):
     """Test strategies on real-world scans of specimens
     """
     # An engine that can read 1d barcodes
-    ONED_ENGINE = ( (InliteEngine(False) if InliteEngine.available() else None) or
+    ONED_ENGINE = ( (InliteEngine('1d') if InliteEngine.available() else None) or
                     (ZbarEngine() if ZbarEngine.available() else None) or 
                     (SoftekEngine(False) if SoftekEngine.available() else None)
                   )
 
     # An engine that can read Data Matrix barcodes
-    DM_ENGINE = ( (InliteEngine(True) if InliteEngine.available() else None) or
+    DM_ENGINE = ( (InliteEngine('datamatrix') if InliteEngine.available() else None) or
                   (LibDMTXEngine() if LibDMTXEngine.available() else None) or 
                   (SoftekEngine(True) if SoftekEngine.available() else None)
                 )

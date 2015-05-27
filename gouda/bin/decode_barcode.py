@@ -149,8 +149,10 @@ def engine_choices():
                       })
 
     if InliteEngine.available():
-        choices.update({'inlite-1d': partial(InliteEngine, datamatrix=False),
-                        'inlite-dm': partial(InliteEngine, datamatrix=True),
+        choices.update({'inlite-1d': partial(InliteEngine, format='1d'),
+                        'inlite-dm': partial(InliteEngine, format='datamatrix'),
+                        'inlite-pdf417': partial(InliteEngine, format='pdf417'),
+                        'inlite-qr': partial(InliteEngine, format='qr'),
                       })
 
     if StecosEngine.available():

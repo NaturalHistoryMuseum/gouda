@@ -69,10 +69,10 @@ class TestDTKEngine(TestEngine):
 @unittest.skipUnless(InliteEngine.available(), 'InliteEngine unavailable')
 class TestInliteEngine(TestEngine):
     def test_1d(self):
-        self._test_1d(InliteEngine(datamatrix=False), type='Unknown')
+        self._test_1d(InliteEngine(format='1d'), type='Unknown')
 
     def test_dm(self):
-        self._test_dm(InliteEngine(datamatrix=True))
+        self._test_dm(InliteEngine(format='datamatrix'))
 
 
 @unittest.skipUnless(LibDMTXEngine.available(), 'LibDMTXEngine unavailable')

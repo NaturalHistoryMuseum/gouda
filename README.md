@@ -192,14 +192,22 @@ apps respectively, provided with the SDK.
 
     conda install --channel https://conda.binstar.org/weiyan zbar
 
-#### Windows
-32-bit only. You must follow these instructions using 32-bit Python.
-
+#### Windows 32-bit
 Download and run the `zbar-0.10` [windows installer](http://zbar.sourceforge.net/download.html); 
 check 'Development Headers and Libraries'. Modify your `PATH` to include
 `C:\Program Files (x86)\ZBar\bin`
 
     pip install --global-option=build_ext --global-option="-IC:/Program Files (x86)/ZBar/include" --global-option="-LC:/Program Files (x86)/ZBar/lib" zbar
+
+#### Windows 64-bit
+Download and install the build from
+[zbar](https://github.com/NaturalHistoryMuseum/ZBarWin64/):
+
+    pip install zbar-<whatever>.whl
+
+Test
+
+    python -c "import zbar; print(zbar)"
 
 #### Mac
 The pip install of zbar on my Mac resulted in a segfault on `import zbar`.

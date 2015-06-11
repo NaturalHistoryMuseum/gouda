@@ -30,7 +30,7 @@ https://pypi.python.org/pypi/zbar
         return zbar is not None
 
     def decode_file(self, path):
-        return self(cv2.imread(str(path)), cv2.IMREAD_GRAYSCALE)
+        return self(cv2.imread(str(path), cv2.IMREAD_GRAYSCALE))
 
     def __call__(self, img):
         # Decode barcodes in img using zbar

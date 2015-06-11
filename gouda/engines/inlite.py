@@ -91,7 +91,7 @@ class InliteEngine(object):
         barcodes = [None] * len(self.d.Barcodes)
         for i,b in enumerate(self.d.Barcodes):
             barcodes[i] = Barcode(self.types.get(b.Type, 'Unknown'),
-                                  str(b.Text))
+                                  b.Text)
         return barcodes
 
     def __call__(self, img):

@@ -68,8 +68,7 @@ class DataSymbolEngine(object):
         res = [None] * self.d.Barcodes.length
         for i in range(0, self.d.Barcodes.length):
             b = self.d.Barcodes.item(i)
-            res[i] = Barcode(self.types.get(b.BarcodeType, 'Unknown'),
-                             b.Text)
+            res[i] = Barcode(self.types.get(b.BarcodeType, 'Unknown'), b.Text)
         return res
 
     def __call__(self, img):

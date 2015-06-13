@@ -1,6 +1,9 @@
 # gouda
 
+<!---
+Disabled due to lack of availability of recent Open CV build
 [![Travis status](https://travis-ci.org/NaturalHistoryMuseum/gouda.svg?branch=master)](https://travis-ci.org/NaturalHistoryMuseum/gouda)
+-->
 
 A python package for decoding barcodes, possibly more than one, in complex
 images such as scans of museum specimens.

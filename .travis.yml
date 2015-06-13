@@ -7,13 +7,10 @@ virtualenv:
   system_site_packages: true
 
 before_install:
-  # Later version of open cv
-  - sudo add-apt-repository -y ppa:kubuntu-ppa/backports
   - sudo apt-get update
 
 install:
-  - sudo apt-get install -qq python-opencv
-  - sudo apt-get install --fix-missing python-numpy python-zbar libdmtx-dev
+  - sudo apt-get install --fix-missing python-opencv python-numpy python-zbar libdmtx-dev
   - pip install -e 'git+git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers#egg=pydmtx&subdirectory=python'
   - pip install -r requirements.txt
   - "export DISPLAY=:99.0"

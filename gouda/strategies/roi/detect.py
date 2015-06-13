@@ -56,9 +56,13 @@ class Detector(object):
             debug_print('Convert grey')
             grey = cv2.cvtColor(grey, cv2.COLOR_BGR2GRAY)
 
-        debug_print('Equalize')
-        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-        equalized = clahe.apply(grey)
+        if hasattr(cv2, 'createCLAHE'):
+            debug_print('Equalize')
+            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+            equalized = clahe.apply(grey)
+        else:
+            # createCLAHE not in all versions OpenCV 2.4.x
+            equalized = grey
 
         # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_gradients/py_gradients.html
         debug_print('High-pass filter')

@@ -7,3 +7,5 @@ rmdir /Q /S dist build
 
 echo Tests
 nosetests --with-coverage --cover-html --cover-inclusive --cover-erase --cover-tests --cover-package=gouda
+
+pyinstaller --onefile --specpath=build gouda/bin/decode_barcode.py

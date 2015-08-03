@@ -13,6 +13,7 @@ from functools import partial
 
 import cv2
 
+import gouda
 import gouda.util
 
 from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
@@ -20,7 +21,7 @@ from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            SoftekEngine, ZbarEngine, ZxingEngine)
 from gouda.gouda_error import GoudaError
 from gouda.util import expand_wildcard, read_image
-from gouda.strategies.roi import roi
+from gouda.strategies.roi.roi import roi
 from gouda.strategies.resize import resize
 
 
@@ -28,25 +29,29 @@ from gouda.strategies.resize import resize
 #         value (see Chris' process)
 
 def decode(paths, strategies, engine, visitors, read_greyscale):
-    """ Finds and decodes barcodes in the image at the given path.
+    """Finds and decodes barcodes in images given in paths
     """
     for p in paths:
         if p.is_dir():
+            # Descend into directory
             decode(p.iterdir(), strategies, engine, visitors, read_greyscale)
         else:
-            # TODO LH Read greyscale affects decoders?
-            # TODO LH Command-line argument for greyscale / colour
+            # Process file
             try:
                 img = read_image(p, read_greyscale)
                 if img is None:
+                    # Most likely not an image
                     for visitor in visitors:
                         visitor.result(p, [None, []])
                 else:
+                    # Read barcodes
                     for strategy in strategies:
                         result = strategy(img, engine)
                         if result:
+                            # Found a barcode
                             break
-                    if not result:
+                    else:
+                        # No barcode was found
                         result = [None, []]
 
                     for visitor in visitors:
@@ -102,6 +107,7 @@ class CSVReportVisitor(object):
                          values,
                          strategy])
 
+
 class RenameReporter(object):
     """Renames files based on their barcodes
     """
@@ -121,6 +127,7 @@ class RenameReporter(object):
             else:
                 path.rename(dest)
                 print('  Renamed to [{0}]'.format(dest))
+
 
 def engine_choices():
     """Returns a dict mapping command-line options to functions that return an
@@ -175,7 +182,7 @@ if __name__=='__main__':
     # TODO Swallow zbar warnings?
 
     parser = argparse.ArgumentParser(description='Finds and decodes barcodes on images')
-    parser.add_argument('--debug', '-v', action='store_true')
+    parser.add_argument('--debug', '-d', action='store_true')
     parser.add_argument('--action', '-a', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
     parser.add_argument('--greyscale', '-g', action='store_true')
 
@@ -185,6 +192,8 @@ if __name__=='__main__':
     parser.add_argument('engine', choices=sorted(choices.keys()))
 
     parser.add_argument('image', nargs='+', help='path to an image or directory')
+    parser.add_argument('-v', '--version', action='version',
+                        version='%(prog)s ' + gouda.__version__)
 
     args = parser.parse_args()
 

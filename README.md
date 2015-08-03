@@ -248,3 +248,16 @@ Reading images as greyscale
 
 Greyscale can improve or degrade chances of finding barcodes, dependent upon 
 the image and engine.
+
+
+## Freezing the `decode_barcode` command-line tool
+
+    pip install pyinstaller
+
+On Linux or Mac OS X
+
+    build.sh
+
+On Windows
+
+    build.bat

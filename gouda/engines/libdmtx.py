@@ -48,7 +48,7 @@ class WrapperLibDMTXEngine(object):
         img = Image.fromarray(np.roll(img, 1, axis=-1))
         img = img.convert('RGB')
 
-        res = d.decode(img.size[0], img.size[1], buffer(img.tostring()))
+        res = d.decode(img.size[0], img.size[1], buffer(img.tobytes()))
 
         res = [None] * d.count()
         for i in xrange(0, d.count()):

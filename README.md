@@ -58,24 +58,24 @@ The easiest way is to install the current Python 2.7 release of
     pip install -r requirements.txt
 
 ## Install [OpenCV](http://www.opencv.org/)
-Linux
+### Linux
 
     conda install -c https://conda.binstar.org/menpo opencv
 
-OS X
+### OS X
 
     conda install -c https://conda.binstar.org/jjhelmus opencv
 
-Windows
+### Windows
 
-Download [OpenCV 2.4.10](http://opencv.org/) and extract to c:\opencv\
+Download [OpenCV 2.4.11](http://opencv.org/) and extract to `c:\opencv\`
 If you installed 32-bit Anaconda:
 
-    copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Users\lawh\Anaconda\DLLs`
+    FOR /F %a IN ('python -c "import sys; print(sys.exec_prefix)"') DO copy C:\opencv\build\python\2.7\x86\cv2.pyd %a\DLLs
 
 If you installed 64-bit Anaconda:
 
-    copy C:\opencv\build\python\2.7\x64\cv2.pyd C:\Users\lawh\Anaconda\DLLs`
+    FOR /F %a IN ('python -c "import sys; print(sys.exec_prefix)"') DO copy C:\opencv\build\python\2.7\x64\cv2.pyd %a\DLLs
 
 Test by start Anaconda prompt and running
 
@@ -99,10 +99,11 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 #### Windows
 
-Download and install the appropriate build of `pydmtx` from
-[dmtx-wrapper](https://github.com/NaturalHistoryMuseum/dmtx-wrappers/):
+Install the appropriate build of `pydmtx` from
+[dmtx-wrapper](https://github.com/NaturalHistoryMuseum/dmtx-wrappers/) - one of:
 
-    pip install pydmtx-<whatever>.whl
+    pip install https://github.com/NaturalHistoryMuseum/dmtx-wrappers/releases/download/v0.7.4b1/pydmtx-0.7.4b1-cp27-none-win32.whl
+    pip install https://github.com/NaturalHistoryMuseum/dmtx-wrappers/releases/download/v0.7.4b1/pydmtx-0.7.4b1-cp27-none-win_amd64.whl
 
 Test
 
@@ -199,25 +200,35 @@ apps respectively, provided with the SDK.
     conda install --channel https://conda.binstar.org/weiyan zbar
 
 #### Windows 32-bit
-Download and run the `zbar-0.10` [windows installer](http://zbar.sourceforge.net/download.html); 
-check 'Development Headers and Libraries'. Modify your `PATH` to include
-`C:\Program Files (x86)\ZBar\bin`
+Install the latest relerase of
+[zbar](https://github.com/NaturalHistoryMuseum/zbar-python-patched/):
 
-    pip install --global-option=build_ext --global-option="-IC:/Program Files (x86)/ZBar/include" --global-option="-LC:/Program Files (x86)/ZBar/lib" zbar
+    pip install https://github.com/NaturalHistoryMuseum/zbar-python-patched/releases/download/v0.10/zbar-0.10-cp27-none-win32.whl
 
 #### Windows 64-bit
-Download and install the build from
+Install the latest release of
 [zbar](https://github.com/NaturalHistoryMuseum/ZBarWin64/):
 
-    pip install zbar-<whatever>.whl
+    pip install https://github.com/NaturalHistoryMuseum/ZBarWin64/releases/download/v0.10/zbar-0.10-cp27-none-win_amd64.whl
 
 Test
 
     python -c "import zbar; print(zbar)"
 
 #### Mac
-The pip install of zbar on my Mac resulted in a segfault on `import zbar`.
-I compiled zbar-0.10.tar.bz2 from [source](http://zbar.sourceforge.net/download.html).
+
+Install the `zbar` library
+
+    brew install zbar
+
+Install the latest release of
+[zbar](https://github.com/NaturalHistoryMuseum/zbar-python-patched/):
+
+    pip install https://github.com/NaturalHistoryMuseum/zbar-python-patched/archive/v0.10.tar.gz
+
+Test
+
+    python -c "import zbar; print(zbar)"
 
 ### zxing
 Install a JDK.

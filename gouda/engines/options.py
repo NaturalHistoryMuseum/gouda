@@ -1,3 +1,5 @@
+from functools import partial
+
 from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            InliteEngine, LibDMTXEngine, StecosEngine,
                            SoftekEngine, ZbarEngine, ZxingEngine)
@@ -17,7 +19,7 @@ def engine_options():
 
     if AccusoftEngine.available():
         options.update({
-            'accusoft-1d':  partial(AccusoftEngine, datamatrix=False),
+            'accusoft-1d': partial(AccusoftEngine, datamatrix=False),
             'accusoft-dm': partial(AccusoftEngine, datamatrix=True),
         })
 

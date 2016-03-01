@@ -200,7 +200,7 @@ apps respectively, provided with the SDK.
     conda install --channel https://conda.binstar.org/weiyan zbar
 
 #### Windows 32-bit
-Install the latest relerase of
+Install the latest release of
 [zbar](https://github.com/NaturalHistoryMuseum/zbar-python-patched/):
 
     pip install https://github.com/NaturalHistoryMuseum/zbar-python-patched/releases/download/v0.10/zbar-0.10-cp27-none-win32.whl

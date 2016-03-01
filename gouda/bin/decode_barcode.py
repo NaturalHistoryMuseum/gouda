@@ -16,9 +16,7 @@ import cv2
 import gouda
 import gouda.util
 
-from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
-                           InliteEngine, LibDMTXEngine, StecosEngine,
-                           SoftekEngine, ZbarEngine, ZxingEngine)
+from gouda.engine.options import engine_options
 from gouda.gouda_error import GoudaError
 from gouda.util import expand_wildcard, read_image
 from gouda.strategies.roi.roi import roi
@@ -129,52 +127,6 @@ class RenameReporter(object):
                 print('  Renamed to [{0}]'.format(dest))
 
 
-def engine_choices():
-    """Returns a dict mapping command-line options to functions that return an
-    engine
-    """
-    choices = {'libdmtx': LibDMTXEngine,
-               'zbar': ZbarEngine,
-               'zxing': ZxingEngine,
-               }
-
-    choices = {k:v for k,v in choices.iteritems() if v.available()}
-
-    if AccusoftEngine.available():
-        choices.update({'accusoft-1d':  partial(AccusoftEngine, datamatrix=False),
-                        'accusoft-dm': partial(AccusoftEngine, datamatrix=True),
-                      })
-
-    if DataSymbolEngine.available():
-        choices.update({'datasymbol-1d': partial(DataSymbolEngine, datamatrix=False),
-                        'datasymbol-dm': partial(DataSymbolEngine, datamatrix=True),
-                      })
-
-    if DTKEngine.available():
-        choices.update({'dtk-1d': partial(DTKEngine, datamatrix=False),
-                        'dtk-dm': partial(DTKEngine, datamatrix=True),
-                      })
-
-    if InliteEngine.available():
-        choices.update({'inlite-1d': partial(InliteEngine, format='1d'),
-                        'inlite-dm': partial(InliteEngine, format='datamatrix'),
-                        'inlite-pdf417': partial(InliteEngine, format='pdf417'),
-                        'inlite-qrcode': partial(InliteEngine, format='qrcode'),
-                      })
-
-    if StecosEngine.available():
-        choices.update({'stecos-1d' : partial(StecosEngine, datamatrix=False),
-                        'stecos-dm' : partial(StecosEngine, datamatrix=True),
-                      })
-
-    if SoftekEngine.available():
-        choices.update({'softek-1d': partial(SoftekEngine, datamatrix=False),
-                        'softek-dm': partial(SoftekEngine, datamatrix=True),
-                      })
-
-    return choices
-
-
 if __name__=='__main__':
     # TODO ROI candidate area max and/or min?
     # TODO Give area min and max as percentage of total image area?
@@ -186,10 +138,10 @@ if __name__=='__main__':
     parser.add_argument('--action', '-a', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
     parser.add_argument('--greyscale', '-g', action='store_true')
 
-    choices = engine_choices()
-    if not choices:
+    options = engine_options()
+    if not options:
         raise GoudaError('No engines are available')
-    parser.add_argument('engine', choices=sorted(choices.keys()))
+    parser.add_argument('engine', choices=sorted(options.keys()))
 
     parser.add_argument('image', nargs='+', help='path to an image or directory')
     parser.add_argument('-v', '--version', action='version',
@@ -199,7 +151,7 @@ if __name__=='__main__':
 
     gouda.util.DEBUG_PRINT = args.debug
 
-    engine = choices[args.engine]()
+    engine = options[args.engine]()
 
     if 'csv'==args.action:
         visitor = CSVReportVisitor(args.engine, args.greyscale)

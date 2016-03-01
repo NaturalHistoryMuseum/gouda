@@ -16,7 +16,7 @@ import cv2
 import gouda
 import gouda.util
 
-from gouda.engine.options import engine_options
+from gouda.engines.options import engine_options
 from gouda.gouda_error import GoudaError
 from gouda.util import expand_wildcard, read_image
 from gouda.strategies.roi.roi import roi

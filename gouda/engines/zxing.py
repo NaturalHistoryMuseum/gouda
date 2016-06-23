@@ -2,10 +2,7 @@ import os
 import subprocess
 import tempfile
 
-from pathlib import Path
-
 import cv2
-
 
 from gouda.barcode import Barcode
 from gouda.java import java
@@ -56,7 +53,9 @@ class ZxingEngine(object):
     def __call__(self, img):
         img_temp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
         try:
-            debug_print('Writing temp file [{0}] for zxing'.format(img_temp.name))
+            debug_print(
+                'Writing temp file [{0}] for zxing'.format(img_temp.name)
+            )
             cv2.imwrite(img_temp.name, img)
             return self.decode_file(img_temp.name)
         finally:

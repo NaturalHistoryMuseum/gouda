@@ -14,14 +14,17 @@ except ImportError:
 
 DEBUG_PRINT = False
 
+
 def debug_print(*args, **kwargs):
     # TODO LH Duplicated in inselect
     if DEBUG_PRINT:
         print(*args, **kwargs)
 
+
 def read_image(path, greyscale):
     flags = cv2.IMREAD_GRAYSCALE if greyscale else cv2.IMREAD_UNCHANGED
     return cv2.imread(str(path), flags)
+
 
 def expand_wildcard(args):
     # Crummy solution to crummy windows shell behaviour
@@ -32,6 +35,7 @@ def expand_wildcard(args):
         else:
             paths += [p]
     return [Path(p) for p in paths]
+
 
 def is_clsid_registered(clsid):
     """Returns True if clsid is registered

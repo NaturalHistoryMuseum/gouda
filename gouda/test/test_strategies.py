@@ -16,26 +16,28 @@ class TestStrategies(unittest.TestCase):
     """Test strategies on real-world scans of specimens
     """
     # An engine that can read 1d barcodes
-    ONED_ENGINE = ( (InliteEngine('1d') if InliteEngine.available() else None) or
-                    (ZbarEngine() if ZbarEngine.available() else None) or 
-                    (SoftekEngine(False) if SoftekEngine.available() else None)
-                  )
+    ONED_ENGINE = (
+        (InliteEngine('1d') if InliteEngine.available() else None) or
+        (ZbarEngine() if ZbarEngine.available() else None) or
+        (SoftekEngine(False) if SoftekEngine.available() else None)
+    )
 
     # An engine that can read Data Matrix barcodes
-    DM_ENGINE = ( (InliteEngine('datamatrix') if InliteEngine.available() else None) or
-                  (LibDMTXEngine() if LibDMTXEngine.available() else None) or 
-                  (SoftekEngine(True) if SoftekEngine.available() else None)
-                )
+    DM_ENGINE = (
+        (InliteEngine('datamatrix') if InliteEngine.available() else None) or
+        (LibDMTXEngine() if LibDMTXEngine.available() else None) or
+        (SoftekEngine(True) if SoftekEngine.available() else None)
+    )
 
     def _test(self, file, engine, strategy, expected):
         img = cv2.imread(str(TESTDATA / file))
-        method,barcodes = strategy(img, engine)
+        method, barcodes = strategy(img, engine)
         actual = sorted([b.data for b in barcodes])
         self.assertEqual(sorted(expected), actual)
-        return method,barcodes
+        return method, barcodes
 
     def _test_1d(self, strategy):
-        expected = ['BM001128286','BM001128287','BM001128288']
+        expected = ['BM001128286', 'BM001128287', 'BM001128288']
         return self._test('BM001128287.jpg',
                           self.ONED_ENGINE,
                           strategy,
@@ -89,5 +91,5 @@ class TestStrategies(unittest.TestCase):
         self.assertIsNone(roi(img, self.ONED_ENGINE))
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main()

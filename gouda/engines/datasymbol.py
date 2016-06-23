@@ -46,17 +46,18 @@ class DataSymbolEngine(object):
         # Map values in EBarcodeTypes to text
         # This should be a class member but the enumeration is visible only
         # after the call to EnsureDispatch.
-        self.types = { c.Code128 : 'Code 128',
-                       c.Code39 : 'Code 39',
-                       c.Interl25 : 'Interleaved 2 of 5',
-                       c.EAN13 : 'EAN-13',
-                       c.EAN8 : 'EAN-8',
-                       c.Codabar : 'Codabar',
-                       c.Code11 : 'Code 11',
-                       c.UPCA : 'UPC-A',
-                       c.UPCE : 'UPC-E',
-                       c.DataMatrix : 'Data Matrix',
-                     }
+        self.types = {
+            c.Code128: 'Code 128',
+            c.Code39: 'Code 39',
+            c.Interl25: 'Interleaved 2 of 5',
+            c.EAN13: 'EAN-13',
+            c.EAN8: 'EAN-8',
+            c.Codabar: 'Codabar',
+            c.Code11: 'Code 11',
+            c.UPCA: 'UPC-A',
+            c.UPCE: 'UPC-E',
+            c.DataMatrix: 'Data Matrix',
+        }
 
     @classmethod
     def available(cls):
@@ -75,7 +76,8 @@ class DataSymbolEngine(object):
         # Temporary files on Windows are pain
         img_temp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
         try:
-            debug_print('Writing temp file [{0}] for Data Symbol'.format(img_temp.name))
+            msg = 'Writing temp file [{0}] for Data Symbol'
+            debug_print(msg.format(img_temp.name))
             cv2.imwrite(img_temp.name, img)
             img_temp.close()
             return self.decode_file(img_temp.name)

@@ -35,12 +35,12 @@ class Rect(collections.namedtuple('Rect', ['left', 'top', 'width', 'height'])):
 
     def __eq__(self, other):
         if isinstance(other, Rect):
-            return (self.left==other.left and
-                    self.top==other.top and
-                    self.width==other.width and
-                    self.height==other.height)
+            return (self.left == other.left and
+                    self.top == other.top and
+                    self.width == other.width and
+                    self.height == other.height)
         else:
             raise NotImplementedError()
 
     def __ne__(self, other):
-      return not self==other
+        return not self == other

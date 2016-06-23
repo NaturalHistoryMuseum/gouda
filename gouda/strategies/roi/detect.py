@@ -1,26 +1,23 @@
 from __future__ import print_function
 
-import subprocess
-import tempfile
-
 import cv2
 import numpy as np
-
-from pathlib import Path
 
 from .rect import Rect
 from gouda.util import debug_print
 
+
 class Detector(object):
-    """ Detects candidate barcode areas in an image
+    """Detects candidate barcode areas in an image
     """
 
     # Detection algorithm tested with images of this width
     WIDTH = 2048
 
     # Two different structuring kernels
-    FIRST = (11,11)
-    SECOND = (50,50)
+    FIRST = (11, 11)
+    SECOND = (50, 50)
+
     def __init__(self, img, structuring_kernel=FIRST):
         self._img = img
         self._candidates = None
@@ -46,18 +43,20 @@ class Detector(object):
         debug_print('Computing candidate barcode areas')
 
         resized = self._img
-        if self.WIDTH!=resized.shape[1]:
+        if self.WIDTH != resized.shape[1]:
             factor = float(self.WIDTH)/resized.shape[1]
-            debug_print('Resize {0}, factor of {1:.2}'.format(self.WIDTH, factor))
-            resized = cv2.resize(resized, (0,0), fx=factor, fy=factor)
+            debug_print(
+                'Resize {0}, factor of {1:.2}'.format(self.WIDTH, factor)
+            )
+            resized = cv2.resize(resized, (0, 0), fx=factor, fy=factor)
         grey = resized
 
-        if 'uint8'!=grey.dtype or 2!=len(grey.shape):
+        if 'uint8' != grey.dtype or 2 != len(grey.shape):
             debug_print('Convert grey')
             grey = cv2.cvtColor(grey, cv2.COLOR_BGR2GRAY)
 
         debug_print('Equalize')
-        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         equalized = clahe.apply(grey)
 
         # http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_gradients/py_gradients.html
@@ -73,14 +72,16 @@ class Detector(object):
 
         debug_print('Low-pass filter')
         if True:
-            gradient = cv2.GaussianBlur(gradient, (3,3), 0)
+            gradient = cv2.GaussianBlur(gradient, (3, 3), 0)
         else:
             # Better than gaussian blur at preserving edges but slower
-            gradient = cv2.bilateralFilter(gradient,9,75,75)        # TODO Parameter values?
+            # TODO Parameter values?
+            gradient = cv2.bilateralFilter(gradient, 9, 75, 75)
 
         debug_print('Threshold')
-        # All scans should have good, consistent lighting so apply a very high threshold
-        retval,thresh = cv2.threshold(gradient, 0xd0, 0xff, cv2.THRESH_BINARY)
+        # All scans should have good, consistent lighting so apply a very high
+        # threshold
+        retval, thresh = cv2.threshold(gradient, 0xd0, 0xff, cv2.THRESH_BINARY)
 
         debug_print('Morphology')
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, self.structuring_kernel)
@@ -88,16 +89,21 @@ class Detector(object):
 
         debug_print('Contours')
         cont_img = closing.copy()
-        contours,hierarchy = cv2.findContours(cont_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(
+            cont_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
 
-        working_images = { 'resized':resized,
-                           'grey':grey,
-                           'equalized':equalized,
-                           'gradient':gradient,
-                           'thresh':thresh,
-                           'closing':closing,
-                         }
+        working_images = {
+            'resized': resized,
+            'grey': grey,
+            'equalized': equalized,
+            'gradient': gradient,
+            'thresh': thresh,
+            'closing': closing,
+            }
 
         candidates = [cv2.boundingRect(c) for c in contours]
-        candidates = [Rect(x, y, width, height) for x, y, width, height in candidates]
+        candidates = [
+            Rect(x, y, width, height) for x, y, width, height in candidates
+        ]
         return (working_images, candidates)

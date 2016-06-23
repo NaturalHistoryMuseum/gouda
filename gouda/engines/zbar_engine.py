@@ -13,14 +13,11 @@ except ImportError:
 
 
 class ZbarEngine(object):
-    # TODO LH Rather that copying files, better to add the relevant include lib
-    # paths
     """Decode using the zbar library
 
-http://sourceforge.net/projects/zbar/
-https://pypi.python.org/pypi/zbar
-"""
-
+    http://sourceforge.net/projects/zbar/
+    https://pypi.python.org/pypi/zbar
+    """
     def __init__(self):
         if not self.available():
             raise GoudaError('zbar unavailable')
@@ -37,8 +34,8 @@ https://pypi.python.org/pypi/zbar
         # https://github.com/ZBar/ZBar/blob/master/python/README
         # https://github.com/herbyme/zbar/blob/master/python/examples/scan_image.py
         scanner = zbar.ImageScanner()
-        height,width = img.shape[:2]
-        if 'uint8'!=img.dtype or 2!=len(img.shape):
+        height, width = img.shape[:2]
+        if 'uint8' != img.dtype or 2 != len(img.shape):
             debug_print('Convert to greyscale for zbar')
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         image = zbar.Image(width, height, 'Y800', img.tostring())

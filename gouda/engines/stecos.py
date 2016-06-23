@@ -1,8 +1,6 @@
 import subprocess
 import tempfile
 
-from pathlib import Path
-
 import cv2
 
 from gouda import config
@@ -27,15 +25,19 @@ class StecosEngine(object):
 
     @classmethod
     def available(cls):
-        return (cls.DMREAD is not None and cls.DMREAD.is_file() and cls.READBAR
-                and cls.READBAR.is_file())
+        return (
+            cls.DMREAD is not None and cls.DMREAD.is_file() and cls.READBAR and
+            cls.READBAR.is_file()
+        )
 
     def decode_file(self, path):
-        dmtx = [str(self.command),
-                str(path),
-               ]
-        dmtxread = subprocess.Popen(dmtx,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        dmtx = [
+            str(self.command),
+            str(path),
+        ]
+        dmtxread = subprocess.Popen(
+            dmtx, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
         stdoutdata, stderrdata = dmtxread.communicate()
         if stderrdata:
             raise ValueError(stderrdata)
@@ -51,6 +53,8 @@ class StecosEngine(object):
     def __call__(self, img):
         # Decode data matrix barcodes in img using dmtxread
         with tempfile.NamedTemporaryFile(suffix='.tiff') as img_temp:
-            debug_print('Writing temp file [{0}] for stecos'.format(img_temp.name))
+            debug_print(
+                'Writing temp file [{0}] for stecos'.format(img_temp.name)
+            )
             cv2.imwrite(img_temp.name, img)
             return self.decode_file(img_temp.name)

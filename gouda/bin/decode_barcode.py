@@ -3,13 +3,9 @@ from __future__ import print_function
 
 import argparse
 import csv
-import glob
-import os
 import sys
 import time
 import traceback
-
-from functools import partial
 
 import cv2
 
@@ -66,7 +62,7 @@ class BasicReportVisitor(object):
         print(path)
         strategy, barcodes = result
         print('Found [{0}] barcodes:'.format(len(barcodes)))
-        for index,barcode in enumerate(barcodes):
+        for index, barcode in enumerate(barcodes):
             print('[{0}] [{1}] [{2}]'.format(index, barcode.type, barcode.data))
 
 
@@ -84,8 +80,10 @@ class CSVReportVisitor(object):
     """
     def __init__(self, engine, greyscale, file=sys.stdout):
         self.w = csv.writer(file, lineterminator='\n')
-        self.w.writerow(['OS','Engine','Directory','File','Image.conversion',
-                         'Elapsed','N.found','Types','Values','Strategy'])
+        self.w.writerow([
+            'OS', 'Engine', 'Directory', 'File', 'Image.conversion',
+            'Elapsed', 'N.found', 'Types', 'Values', 'Strategy'
+        ])
         self.engine = engine
         self.image_conversion = 'Greyscale' if greyscale else 'Unchanged'
         self.start_time = time.time()
@@ -115,27 +113,35 @@ class RenameReporter(object):
         if not barcodes:
             print('  No barcodes')
         else:
-            barcodes = [b.data.replace('(', '-').replace(')', '') for b in barcodes]
+            barcodes = [
+                b.data.replace('(', '-').replace(')', '') for b in barcodes
+            ]
             fname = '_'.join(barcodes)
             dest = path.parent / (fname + path.suffix)
             if path == dest:
                 print('  Already correctly named')
             elif dest.is_file():
-                print('  Cannot rename to [{0}] because destination exists'.format(dest))
+                msg = '  Cannot rename to [{0}] because destination exists'
+                print(msg.format(dest))
             else:
                 path.rename(dest)
                 print('  Renamed to [{0}]'.format(dest))
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     # TODO ROI candidate area max and/or min?
     # TODO Give area min and max as percentage of total image area?
     # TODO Report barcode regions  - both normalised and absolute coords?
     # TODO Swallow zbar warnings?
 
-    parser = argparse.ArgumentParser(description='Finds and decodes barcodes on images')
+    parser = argparse.ArgumentParser(
+        description='Finds and decodes barcodes on images'
+    )
     parser.add_argument('--debug', '-d', action='store_true')
-    parser.add_argument('--action', '-a', choices=['basic', 'terse', 'csv', 'rename'], default='basic')
+    parser.add_argument(
+        '--action', '-a',
+        choices=['basic', 'terse', 'csv', 'rename'], default='basic'
+    )
     parser.add_argument('--greyscale', '-g', action='store_true')
 
     options = engine_options()
@@ -153,11 +159,11 @@ if __name__=='__main__':
 
     engine = options[args.engine]()
 
-    if 'csv'==args.action:
+    if 'csv' == args.action:
         visitor = CSVReportVisitor(args.engine, args.greyscale)
-    elif 'terse'==args.action:
+    elif 'terse' == args.action:
         visitor = TerseReportVisitor()
-    elif 'rename'==args.action:
+    elif 'rename' == args.action:
         visitor = RenameReporter()
     else:
         visitor = BasicReportVisitor()

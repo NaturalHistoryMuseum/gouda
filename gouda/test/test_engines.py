@@ -105,7 +105,6 @@ class TestLibDMTXEngine(TestEngine):
 class TestSoftekEngine(TestEngine):
     # Evaluation SDK replaces the last three characters of the
     # decoded value with '???', so this test needs to do some extra work.
-    
     @unittest.skipIf(sys.platform.startswith('win'),
                      "Windows SoftekEngine not able to decode self.CODE128")
     def test_1d(self):
@@ -152,5 +151,5 @@ class TestZxingEngine(TestEngine):
     def test_dm(self):
         self._test_dm(ZxingEngine())
 
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main()

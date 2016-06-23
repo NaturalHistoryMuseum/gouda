@@ -82,6 +82,8 @@ class TestStrategies(unittest.TestCase):
 
     @unittest.skipUnless(ONED_ENGINE,
                          'No available engine for reading 1d codes')
+    @unittest.skipUnless(hasattr(cv2, 'createCLAHE'),
+                         'Older cv2 without createCLAHE')
     def test_no_barcode_roi(self):
         img = cv2.imread(str(TESTDATA / 'nobarcode.png'))
         self.assertIsNone(roi(img, self.ONED_ENGINE))

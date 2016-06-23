@@ -1,3 +1,6 @@
+# v0.1.6
+- #5 pep8 and code layout
+
 # v0.1.5
 - #3 Fix broken engine options
 

@@ -3,8 +3,6 @@ import subprocess
 import sys
 import tempfile
 
-from pathlib import Path
-
 import cv2
 
 try:
@@ -20,6 +18,7 @@ from gouda.util import debug_print, is_clsid_registered
 
 
 LICENSE_KEY = getattr(config, 'SOFTEK_LICENSE_KEY', '')
+
 
 class Win32SoftekEngine(object):
     """Decode using the Softek Barcode SDK
@@ -84,14 +83,14 @@ class Win32SoftekEngine(object):
             self.d.UseFastScan = False
 
             # If MultipleRead = false or MaxBarcodesPerPage = 1 and the bar code is always closer to the top of a page then set BarcodesAtTopOfPage to True to increase speed.
-            #self.d.BarcodesAtTopOfPage = False
+            # self.d.BarcodesAtTopOfPage = False
 
             # Noise reduction takes longer but can make it possible to read some difficult barcodes
             # When using noise reduction a typical value is 10 - the smaller the value the more effect it has.
             # A zero value turns off noise reduction.
             # If you use NoiseReduction then the ScanDirection mask must be either only horizontal or only
             # vertical (i.e 1, 2, 4, 8, 5 or 10).
-            #self.d.NoiseReduction = 0
+            # self.d.NoiseReduction = 0
 
             # You may need to set a small quiet zone if your barcodes are close to text and pictures in the image.
             # A value of zero uses the default.
@@ -110,7 +109,7 @@ class Win32SoftekEngine(object):
             # OK for most barcodes because even at an angle it is possible to pass a line through the entire
             # length. SkewTolerance can range from 0 to 5 and allows for barcodes skewed to an angle of 45
             # degrees.
-            #self.d.SkewTolerance = 5
+            # self.d.SkewTolerance = 5
 
             # Read most skewed linear barcodes without the need to set SkewTolerance. Currently applies to Codabar, Code 25, Code 39 and Code 128 barcodes only.
             self.d.SkewedLinear = True
@@ -119,7 +118,7 @@ class Win32SoftekEngine(object):
             self.d.SkewedDatamatrix = True
 
             # ColorProcessingLevel controls how much time the toolkit will searching a color image for a barcode.
-            # The default value is 2 and the range of values is 0 to 5. If ColorThreshold is non-zero then 
+            # The default value is 2 and the range of values is 0 to 5. If ColorThreshold is non-zero then
             # ColorProcessingLevel is effectively set to 0.
             self.d.ColorProcessingLevel = 2
 
@@ -134,8 +133,8 @@ class Win32SoftekEngine(object):
             # then only these barcodes are returned. Otherwise, any barcode whose hits are >= MinOccurrence
             # are reported. If you have a very poor quality image then try setting MinOccurrence to 1, but you
             # may find that some false positive results are returned.
-            #self.d.MinOccurrence = 2
-            #self.d.PrefOccurrence = 4
+            # self.d.MinOccurrence = 2
+            # self.d.PrefOccurrence = 4
 
             # Read Code 39 barcodes in extended mode
             # self.d.ExtendedCode39 = True
@@ -160,10 +159,10 @@ class Win32SoftekEngine(object):
             # 2. The height of the area for an unread linear barcode will only cover a portion of the barcode.
             # 3. Only 2-D barcodes that fail to error correct will be reported.
             # 4. The barcode type and value will both be set to UNREAD for all unread barcodes.
-            # 5. The reporting of unread linear barcodes takes no account of settings for individual barcode types. For example, if ReadCode39 is True and 
+            # 5. The reporting of unread linear barcodes takes no account of settings for individual barcode types. For example, if ReadCode39 is True and
             # an image contains a single Code 39 barcode then this will be reported as an unread barcode.
             # 6. 2-D barcodes are only reported as unread if the correct barcode types have been enabled.
-            # 7. Not all unread barcodes will be detected. 
+            # 7. Not all unread barcodes will be detected.
             #
             # The value is a mask with the following values: 1 = linear barcodes, 2 = Datamatrix, 4 = QR-Code, 8 = PDF-417
             self.d.ReportUnreadBarcodes = 0
@@ -213,17 +212,19 @@ class POSIXSoftekEngine(object):
         return cls.BARDECODE is not None and cls.BARDECODE.is_file()
 
     def decode_file(self, path):
-        args = [str(self.BARDECODE),
-                '-m',
-                '-K', 
-                LICENSE_KEY,
-                '-b',
-                ('--ReadDataMatrix=1' if self.datamatrix else 
-                 '--ReadCode128=1 --ReadCode39=1'),
-                str(path),
-               ]
-        softek = subprocess.Popen(args, stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+        args = [
+            str(self.BARDECODE),
+            '-m',
+            '-K',
+            LICENSE_KEY,
+            '-b',
+            ('--ReadDataMatrix=1' if self.datamatrix else
+             '--ReadCode128=1 --ReadCode39=1'),
+            str(path),
+        ]
+        softek = subprocess.Popen(
+            args, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
         stdoutdata, stderrdata = softek.communicate()
         if stdoutdata:
@@ -231,14 +232,17 @@ class POSIXSoftekEngine(object):
             # Lines are printed in the form Type:Value
             # TODO LH regexp
             res = [l.split(':') for l in stdoutdata.strip().split('\n')]
-            return [ Barcode(r[0], r[1]) for r in res]
+            return [Barcode(r[0], r[1]) for r in res]
         else:
             return []
 
     def __call__(self, img):
         with tempfile.NamedTemporaryFile(suffix='.tiff') as img_temp:
-            debug_print('Writing temp file [{0}] for Softek'.format(img_temp.name))
+            debug_print(
+                'Writing temp file [{0}] for Softek'.format(img_temp.name)
+            )
             cv2.imwrite(img_temp.name, img)
             return self.decode_file(img_temp.name)
 
-SoftekEngine = Win32SoftekEngine if 'win32'==sys.platform else POSIXSoftekEngine
+
+SoftekEngine = Win32SoftekEngine if 'win32' == sys.platform else POSIXSoftekEngine

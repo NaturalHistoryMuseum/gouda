@@ -1,10 +1,6 @@
 from .decode import Decoder
 from .detect import Detector
 from .filter import AreaFilter
-from .rect import Rect
-
-from gouda.barcode import Barcode
-from gouda.util import debug_print
 
 
 def roi(img, engine):
@@ -25,4 +21,4 @@ def roi(img, engine):
         if barcode.data not in res:
             res[barcode.data] = barcode
 
-    return ('roi',res.values()) if res else None
+    return ('roi', res.values()) if res else None

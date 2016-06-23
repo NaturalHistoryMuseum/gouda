@@ -59,7 +59,9 @@ class AccusoftEngine(object):
                 # TODO LH Who owns dib?
                 res = windll.kernel32.GlobalFree(dib)
                 if res:
-                    print('Error freeing global handle [{0}]'.format(win32api.GetLastError()))
+                    print('Error freeing global handle [{0}]'.format(
+                        win32api.GetLastError()
+                    ))
             self.ie.FileName = ''
 
         res = [None] * self.be.NumBarcodes
@@ -72,7 +74,8 @@ class AccusoftEngine(object):
         # Temporary files on Windows are pain
         img_temp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
         try:
-            debug_print('Writing temp file [{0}] for Accusoft BarcodeXpress'.format(img_temp.name))
+            msg = 'Writing temp file [{0}] for Accusoft BarcodeXpress'
+            debug_print(msg.format(img_temp.name))
             cv2.imwrite(img_temp.name, img)
             img_temp.close()
             return self.decode_file(img_temp.name)

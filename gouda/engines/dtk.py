@@ -34,43 +34,44 @@ class DTKEngine(object):
             # http://stackoverflow.com/a/21534997/1773758
             self.d = com.gencache.EnsureDispatch(self.CLSID)
             if datamatrix:
-               self.d.BarcodeTypes = c.BT_DataMatrix
+                self.d.BarcodeTypes = c.BT_DataMatrix
             else:
                 self.d.BarcodeTypes = c.BT_Code128 | c.BT_Code39
 
         # Map values in EBarcodeType to text
         # This would ideally be a class member but the enumeration
         # is visible only after the call to EnsureDispatch.
-        self.types = { c.BT_AustraliaPost : 'Australia Post',
-                       c.BT_Codabar : 'Codabar',
-                       c.BT_Code11 : 'Code 11',
-                       c.BT_Code128 : 'Code 128',
-                       c.BT_Code39 : 'Code 39',
-                       c.BT_Code39Extended : 'Code 39 Extended',
-                       c.BT_Code93 : 'Code 93',
-                       c.BT_DataMatrix : 'Data Matrix',
-                       c.BT_EAN13 : 'EAN-13',
-                       c.BT_EAN8 : 'EAN-8',
-                       c.BT_IntelligentMail : 'Intelligent Mail',
-                       c.BT_Inter2of5 : 'Interleaved 2 of 5',
-                       c.BT_MicroQRCode : 'Micro QR Code',
-                       c.BT_PatchCode : 'Patch code',
-                       c.BT_PDF417 : 'PDF 417',
-                       c.BT_PharmaCode : 'Pharma Code',
-                       c.BT_Planet : 'Planet',
-                       c.BT_Plus2 : 'Plus 2',
-                       c.BT_Plus5 : 'Plus 5',
-                       c.BT_Postnet : 'Postnet',
-                       c.BT_QRCode : 'QR Code',
-                       c.BT_RM4SCC : 'RM 4 SCC',
-                       c.BT_RSS14 : 'RSS 14',
-                       c.BT_RSSExpanded : 'RSS Expanded',
-                       c.BT_RSSLimited : 'RSS Limited',
-                       c.BT_UCC128 : 'UCC 128',
-                       c.BT_Unknown : 'Unknown',
-                       c.BT_UPCA : 'UPCA',
-                       c.BT_UPCE : 'UPCE',
-                     }
+        self.types = {
+            c.BT_AustraliaPost: 'Australia Post',
+            c.BT_Codabar: 'Codabar',
+            c.BT_Code11: 'Code 11',
+            c.BT_Code128: 'Code 128',
+            c.BT_Code39: 'Code 39',
+            c.BT_Code39Extended: 'Code 39 Extended',
+            c.BT_Code93: 'Code 93',
+            c.BT_DataMatrix: 'Data Matrix',
+            c.BT_EAN13: 'EAN-13',
+            c.BT_EAN8: 'EAN-8',
+            c.BT_IntelligentMail: 'Intelligent Mail',
+            c.BT_Inter2of5: 'Interleaved 2 of 5',
+            c.BT_MicroQRCode: 'Micro QR Code',
+            c.BT_PatchCode: 'Patch code',
+            c.BT_PDF417: 'PDF 417',
+            c.BT_PharmaCode: 'Pharma Code',
+            c.BT_Planet: 'Planet',
+            c.BT_Plus2: 'Plus 2',
+            c.BT_Plus5: 'Plus 5',
+            c.BT_Postnet: 'Postnet',
+            c.BT_QRCode: 'QR Code',
+            c.BT_RM4SCC: 'RM 4 SCC',
+            c.BT_RSS14: 'RSS 14',
+            c.BT_RSSExpanded: 'RSS Expanded',
+            c.BT_RSSLimited: 'RSS Limited',
+            c.BT_UCC128: 'UCC 128',
+            c.BT_Unknown: 'Unknown',
+            c.BT_UPCA: 'UPCA',
+            c.BT_UPCE: 'UPCE',
+        }
 
     @classmethod
     def available(cls):

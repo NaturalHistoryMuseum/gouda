@@ -9,5 +9,6 @@ if 'win32' == sys.platform:
 else:
     JAVA = Path('/usr/bin/java')
 
+
 def available():
     return JAVA.is_file()

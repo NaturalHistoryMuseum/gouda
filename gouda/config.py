@@ -22,7 +22,10 @@ else:
     debug_print('Read config from [{0}]'.format(_DEV))
 
     thismodule = sys.modules[__name__]
-    items = ('SOFTEK_LICENSE_KEY', 'SOFTEK_BARDECODE', 'LIBDMTX_DTMXREAD', 'STECOS_DMREAD', 'STECOS_READBAR')
+    items = (
+        'SOFTEK_LICENSE_KEY', 'SOFTEK_BARDECODE', 'LIBDMTX_DTMXREAD',
+        'STECOS_DMREAD', 'STECOS_READBAR'
+    )
     for item in items:
         value = getattr(dev, item, None)
         if value:

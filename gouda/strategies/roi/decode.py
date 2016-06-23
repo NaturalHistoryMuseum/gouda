@@ -3,7 +3,6 @@ import numpy as np
 
 from gouda.barcode import Barcode
 from gouda.util import debug_print
-from .rect import Rect
 
 
 class Decoder(object):
@@ -28,7 +27,7 @@ class Decoder(object):
     def _compute_barcodes(self):
         # Convert to greyscale if required
         img = self._img
-        if 'uint8'!=img.dtype or 2!=len(img.shape):
+        if 'uint8' != img.dtype or 2 != len(img.shape):
             debug_print('Convert grey')
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -38,11 +37,11 @@ class Decoder(object):
             crop = img[top:bottom, left:right]
 
             # Unsharp mask
-            blur = cv2.GaussianBlur(crop, (0,0), 10)
+            blur = cv2.GaussianBlur(crop, (0, 0), 10)
             crop = cv2.addWeighted(crop, 1.5, blur, -0.5, 0)
 
-            # Equalisation/contrast sometimes causes libdtmx to fail, sometimes causes
-            # it to succeed.
+            # Equalisation/contrast sometimes causes libdtmx to fail, sometimes
+            # causes it to succeed.
             decoded = self._engine(crop)
             if not decoded:
                 debug_print('Applying contrast to candidate crop')

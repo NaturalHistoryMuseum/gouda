@@ -1,8 +1,6 @@
 import subprocess
 import tempfile
 
-from pathlib import Path
-
 import cv2
 import numpy as np
 
@@ -21,6 +19,7 @@ except ImportError:
 # Two interfaces to libdmtx - WrapperLibDMTXEngine uses pydmtx
 # SubprocessLibDMTXEngine uses the dmtxread command-line tool
 # WrapperLibDMTXEngine preferred - both kept here for reference
+
 
 class WrapperLibDMTXEngine(object):
     """Decode Data Matrix barcodes using the libdmtx decoder via pydmtx
@@ -65,7 +64,7 @@ class SubprocessLibDMTXEngine(object):
     def __init__(self, timeout_ms=300):
         if not self.available():
             raise GoudaError('libdmtx unavailable')
-        elif timeout_ms<0:
+        elif timeout_ms < 0:
             raise GoudaError('Bad timeout [{0}]'.format(timeout_ms))
         else:
             self.timeout_ms = timeout_ms
@@ -75,16 +74,19 @@ class SubprocessLibDMTXEngine(object):
         return cls.DTMXREAD is not None and cls.DTMXREAD.is_file()
 
     def decode_file(self, path):
-        dmtx = [str(self.DTMXREAD),
-                '--newline',
-                '--stop-after=1',
-                '--milliseconds={0}'.format(self.timeout_ms),
-                str(path),
-               ]
+        dmtx = [
+            str(self.DTMXREAD),
+            '--newline',
+            '--stop-after=1',
+            '--milliseconds={0}'.format(self.timeout_ms),
+            str(path),
+        ]
         # dmtxread returns a non-zero exit code if no barcodes are
         # found - this is bone-headed.
-        dmtxread = subprocess.Popen(dmtx,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        dmtxread = subprocess.Popen(
+            dmtx,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
         stdoutdata, stderrdata = dmtxread.communicate()
         if stderrdata:
             raise ValueError(stderrdata)
@@ -98,7 +100,9 @@ class SubprocessLibDMTXEngine(object):
     def __call__(self, img):
         # Decode data matrix barcodes in img using dmtxread
         with tempfile.NamedTemporaryFile(suffix='.png') as img_temp:
-            debug_print('Writing temp file [{0}] for dmtxread'.format(img_temp.name))
+            debug_print(
+                'Writing temp file [{0}] for dmtxread'.format(img_temp.name)
+            )
             cv2.imwrite(img_temp.name, img)
             return self.decode_file(img_temp.name)
 

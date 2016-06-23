@@ -82,8 +82,10 @@ class DTKEngine(object):
         barcodes = [None] * self.d.Barcodes.Count
         for i in xrange(0, self.d.Barcodes.Count):
             b = self.d.Barcodes.Item(i)
-            barcodes[i] = Barcode(self.types.get(b.Type, 'Unknown'),
-                                  b.BarcodeString)
+            # TODO Coordinates
+            barcodes[i] = Barcode(
+                self.types.get(b.Type, 'Unknown'), b.BarcodeString, None
+            )
         return barcodes
 
     def __call__(self, img):

@@ -1,6 +1,6 @@
 import unittest
 
-from gouda.strategies.roi.rect import Coordinates, Point, Rect
+from gouda.rect import Coordinates, Point, Rect
 
 
 class TestCoordinates(unittest.TestCase):
@@ -40,8 +40,23 @@ class TestRect(unittest.TestCase):
     def test_bottomright(self):
         self.assertEqual(Point(2, 4), self.R.bottomright)
 
+    def test_x_centre(self):
+        self.assertEqual(1, self.R.x_centre)
+
+    def test_y_centre(self):
+        self.assertEqual(2, self.R.y_centre)
+
     def test_centre(self):
         self.assertEqual(Point(1, 2), self.R.centre)
+
+    def test_padded(self):
+        r = Rect(0, 0, 100, 100)
+        self.assertEqual(Rect(-10, -10, 120, 120), r.padded(10.0))
+
+    def test_intersect(self):
+        a = Rect(-10, -10, 110, 110)
+        b = Rect(0, 0, 100, 100)
+        self.assertEqual(Rect(0, 0, 100, 100), a.intersect(b))
 
     def test_comparison(self):
         a = Rect(0, 1, 2, 3)

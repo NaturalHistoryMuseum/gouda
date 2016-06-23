@@ -9,6 +9,7 @@ from PIL import Image
 from gouda import config
 from gouda.barcode import Barcode
 from gouda.gouda_error import GoudaError
+from gouda.rect import Rect
 from gouda.util import debug_print
 
 try:
@@ -51,7 +52,13 @@ class WrapperLibDMTXEngine(object):
 
         res = [None] * d.count()
         for i in xrange(0, d.count()):
-            res[i] = Barcode('Data Matrix', d.message(1+i))
+            value, coordinates = d.results[i]
+            tr, br, bl, tl = coordinates
+            left, top = tl[0], tl[1]
+            res[i] = Barcode(
+                'Data Matrix', value,
+                Rect(left, top, br[0] - left, br[1] - top)
+            )
         return res
 
 

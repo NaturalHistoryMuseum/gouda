@@ -14,6 +14,7 @@ import gouda.util
 
 from gouda.engines.options import engine_options
 from gouda.gouda_error import GoudaError
+from gouda.rect import Rect
 from gouda.util import expand_wildcard, read_image
 from gouda.strategies.roi.roi import roi
 from gouda.strategies.resize import resize
@@ -82,7 +83,8 @@ class CSVReportVisitor(object):
         self.w = csv.writer(file, lineterminator='\n')
         self.w.writerow([
             'OS', 'Engine', 'Directory', 'File', 'Image.conversion',
-            'Elapsed', 'N.found', 'Types', 'Values', 'Strategy'
+            'Elapsed', 'N.found', 'Types', 'Values', 'Strategy',
+            'Coordinates',
         ])
         self.engine = engine
         self.image_conversion = 'Greyscale' if greyscale else 'Unchanged'
@@ -92,6 +94,10 @@ class CSVReportVisitor(object):
         strategy, barcodes = result
         types = '|'.join(b.type for b in barcodes)
         values = '|'.join(b.data for b in barcodes)
+        rects = (b.rect for b in barcodes)
+        coordinates = '|'.join(
+            str(tuple(r.coordinates)) if r else '' for r in rects
+        )
         self.w.writerow([sys.platform,
                          self.engine,
                          path.parent.name,
@@ -101,7 +107,8 @@ class CSVReportVisitor(object):
                          len(barcodes),
                          types,
                          values,
-                         strategy])
+                         strategy,
+                         coordinates])
 
 
 class RenameReporter(object):
@@ -128,6 +135,29 @@ class RenameReporter(object):
                 print('  Renamed to [{0}]'.format(dest))
 
 
+class ShowBarcodesVisitor(object):
+    """Shows in a window the image with locations of barcodes and waits for a
+    keypress
+    """
+    def result(self, path, result):
+        strategy, barcodes = result
+        img = cv2.imread(str(path))
+
+        # Bounding boxes around barcodes
+        # Add some padding and round coords to ints
+        rects = (Rect(*map(int, b.rect.padded(10))) for b in barcodes if b.rect)
+        for rect in rects:
+            cv2.rectangle(
+                img, rect.topleft, rect.bottomright, (0xff, 0x00, 0x00), 5
+            )
+
+        # Resize to fit screen
+        factor = 800.0 / max(img.shape[:2])
+        img = cv2.resize(img, (0, 0), fx=factor, fy=factor)
+        cv2.imshow('barcodes', img)
+        cv2.waitKey(0)
+
+
 if __name__ == '__main__':
     # TODO ROI candidate area max and/or min?
     # TODO Give area min and max as percentage of total image area?
@@ -140,7 +170,7 @@ if __name__ == '__main__':
     parser.add_argument('--debug', '-d', action='store_true')
     parser.add_argument(
         '--action', '-a',
-        choices=['basic', 'terse', 'csv', 'rename'], default='basic'
+        choices=['basic', 'terse', 'csv', 'rename', 'show'], default='basic'
     )
     parser.add_argument('--greyscale', '-g', action='store_true')
 
@@ -165,9 +195,12 @@ if __name__ == '__main__':
         visitor = TerseReportVisitor()
     elif 'rename' == args.action:
         visitor = RenameReporter()
+    elif 'show' == args.action:
+        visitor = ShowBarcodesVisitor()
     else:
         visitor = BasicReportVisitor()
 
     strategies = [resize, roi]
-    decode(expand_wildcard(args.image), strategies, engine, [visitor],
-           args.greyscale)
+    decode(
+        expand_wildcard(args.image), strategies, engine, [visitor], args.greyscale
+    )

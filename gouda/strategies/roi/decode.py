@@ -55,6 +55,6 @@ class Decoder(object):
                 decoded = self._engine(crop)
 
             for b in decoded:
-                res.append(Barcode(b.type, b.data))
+                res.append(Barcode(b.type, b.data, rect))
 
         return res

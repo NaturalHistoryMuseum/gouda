@@ -3,7 +3,7 @@ from __future__ import print_function
 import cv2
 import numpy as np
 
-from .rect import Rect
+from gouda.rect import Rect
 from gouda.util import debug_print
 
 

@@ -10,6 +10,7 @@ from gouda.barcode import Barcode
 from gouda.engines import (AccusoftEngine, DataSymbolEngine, DTKEngine,
                            InliteEngine, LibDMTXEngine, SoftekEngine,
                            StecosEngine, ZbarEngine, ZxingEngine)
+from gouda.rect import Rect
 
 
 # TODO LH Can Data Matrix barcodes handle unicode?
@@ -18,7 +19,7 @@ TESTDATA = Path(__file__).parent / 'test_data'
 
 
 class TestEngine(unittest.TestCase):
-    """Base class for testing engines
+    """Base class for testing engines, without considering barcode coordinates.
     """
     CODE128 = cv2.imread(str(TESTDATA / 'code128.png'))
     DATAMATRIX = cv2.imread(str(TESTDATA / 'datamatrix.png'))
@@ -26,26 +27,26 @@ class TestEngine(unittest.TestCase):
     PDF417 = cv2.imread(str(TESTDATA / 'pdf417.png'))
     NOBARCODE = cv2.imread(str(TESTDATA / 'nobarcode.png'))
 
-    def _test_1d(self, engine, type='CODE128'):
-        expected = [Barcode(type=type, data='Stegosaurus')]
+    def _test_1d(self, engine, type='CODE128', rect=None):
+        expected = [Barcode(type, 'Stegosaurus', rect)]
         res = engine(self.CODE128)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
-    def _test_dm(self, engine, type='Data Matrix'):
-        expected = [Barcode(type=type, data=u'Triceratops')]
+    def _test_dm(self, engine, type='Data Matrix', rect=None):
+        expected = [Barcode(type, u'Triceratops', rect)]
         res = engine(self.DATAMATRIX)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
-    def _test_qr(self, engine, type='QR Code'):
-        expected = [Barcode(type=type, data=u'Thalassiodracon')]
+    def _test_qr(self, engine, type='QR Code', rect=None):
+        expected = [Barcode(type, u'Thalassiodracon', rect)]
         res = engine(self.QRCODE)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
-    def _test_pdf417(self, engine, type='PDF 417'):
-        expected = [Barcode(type=type, data=u'Metasequoia')]
+    def _test_pdf417(self, engine, type='PDF 417', rect=None):
+        expected = [Barcode(type, u'Metasequoia', rect)]
         res = engine(self.PDF417)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
@@ -98,7 +99,7 @@ class TestInliteEngine(TestEngine):
 @unittest.skipUnless(LibDMTXEngine.available(), 'LibDMTXEngine unavailable')
 class TestLibDMTXEngine(TestEngine):
     def test_dm(self):
-        self._test_dm(LibDMTXEngine())
+        self._test_dm(LibDMTXEngine(), rect=Rect(35, 33, 80, 79))
 
 
 @unittest.skipUnless(SoftekEngine.available(), 'SoftekEngine unavailable')
@@ -140,10 +141,10 @@ class TestStecosEngine(TestEngine):
 @unittest.skipUnless(ZbarEngine.available(), 'ZbarEngine unavailable')
 class TestZbarEngine(TestEngine):
     def test_1d(self):
-        self._test_1d(ZbarEngine())
+        self._test_1d(ZbarEngine(), rect=Rect(233, 12, 0, 74))
 
     def test_qr(self):
-        self._test_qr(ZbarEngine(), type='QRCODE')
+        self._test_qr(ZbarEngine(), type='QRCODE', rect=Rect(27, 27, 145, 145))
 
 
 @unittest.skipUnless(ZxingEngine.available(), 'ZxingEngine unavailable')

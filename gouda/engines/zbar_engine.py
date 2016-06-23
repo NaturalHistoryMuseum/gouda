@@ -1,9 +1,11 @@
 # This file is not called zbar.py to avoid collision with the zbar package
+from __future__ import print_function
 
 import cv2
 
 from gouda.barcode import Barcode
 from gouda.gouda_error import GoudaError
+from gouda.rect import Rect
 from gouda.util import debug_print
 
 try:
@@ -40,4 +42,15 @@ class ZbarEngine(object):
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         image = zbar.Image(width, height, 'Y800', img.tostring())
         scanner.scan(image)
-        return [Barcode(str(s.type), unicode(s.data, 'utf8')) for s in image]
+
+        res = []
+        for s in image:
+            x = [item[0] for item in s.location]
+            y = [item[1] for item in s.location]
+            left, top = min(x), min(y)
+            res.append(Barcode(
+                str(s.type),
+                unicode(s.data, 'utf8'),
+                Rect(left, top, max(x) - left, max(y) - top)
+            ))
+        return res

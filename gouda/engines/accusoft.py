@@ -67,7 +67,10 @@ class AccusoftEngine(object):
         res = [None] * self.be.NumBarcodes
         for i in range(0, self.be.NumBarcodes):
             self.be.GetBarcode(i)
-            res[i] = Barcode(self.be.BarcodeCodeName, self.be.BarcodeResult)
+            # TODO Coordinates
+            res[i] = Barcode(
+                self.be.BarcodeCodeName, self.be.BarcodeResult, None
+            )
         return res
 
     def __call__(self, img):

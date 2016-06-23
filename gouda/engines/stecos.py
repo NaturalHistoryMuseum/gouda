@@ -46,7 +46,7 @@ class StecosEngine(object):
             # Lines are printed in the form Type:Value
             # TODO LH regexp
             res = [l.split(':') for l in stdoutdata.strip().split('\n')]
-            return [Barcode(r[0], r[1]) for r in res]
+            return [Barcode(r[0], r[1], None) for r in res]
         else:
             return []
 

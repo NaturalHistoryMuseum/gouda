@@ -179,8 +179,10 @@ class Win32SoftekEngine(object):
         self.d.ScanBarCode(str(path))
         barcodes = [None] * self.d.BarCodeCount
         for i in xrange(0, self.d.BarCodeCount):
-            barcodes[i] = Barcode(str(self.d.BarStringType(1+i)),
-                                  self.d.BarString(1+i))
+            # TODO Coordinates
+            barcodes[i] = Barcode(
+                str(self.d.BarStringType(1 + i)), self.d.BarString(1 + i), None
+            )
         return barcodes
 
     def __call__(self, img):

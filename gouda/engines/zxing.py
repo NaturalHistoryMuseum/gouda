@@ -48,7 +48,7 @@ class ZxingEngine(object):
             else:
                 # TODO Coordinates?
                 stdoutdata = [l for l in stdoutdata.strip().split('\n') if l]
-                return [Barcode('Data Matrix', l) for l in stdoutdata]
+                return [Barcode('Data Matrix', l, None) for l in stdoutdata]
 
     def __call__(self, img):
         img_temp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)

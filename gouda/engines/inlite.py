@@ -91,8 +91,10 @@ class InliteEngine(object):
         self.d.Find()
         barcodes = [None] * len(self.d.Barcodes)
         for i, b in enumerate(self.d.Barcodes):
-            barcodes[i] = Barcode(self.types.get(b.Type, 'Unknown'),
-                                  b.Text)
+            # TODO Coordinates
+            barcodes[i] = Barcode(
+                self.types.get(b.Type, 'Unknown'), b.Text, None
+            )
         return barcodes
 
     def __call__(self, img):

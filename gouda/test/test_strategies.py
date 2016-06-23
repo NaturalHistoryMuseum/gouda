@@ -55,16 +55,22 @@ class TestStrategies(unittest.TestCase):
 
     @unittest.skipUnless(ONED_ENGINE,
                          'No available engine for reading 1d codes')
+    @unittest.skipUnless(hasattr(cv2, 'createCLAHE'),
+                         'Older cv2 without createCLAHE')
     def test_1d_roi(self):
         self._test_1d(roi)
 
     @unittest.skipUnless(DM_ENGINE,
                          'No available engine for reading Data Matrix codes')
+    @unittest.skipUnless(hasattr(cv2, 'createCLAHE'),
+                         'Older cv2 without createCLAHE')
     def test_dm_resize(self):
         self._test_dm(resize)
 
     @unittest.skipUnless(DM_ENGINE,
                          'No available engine for reading Data Matrix codes')
+    @unittest.skipUnless(hasattr(cv2, 'createCLAHE'),
+                         'Older cv2 without createCLAHE')
     def test_dm_roi(self):
         self._test_dm(roi)
 

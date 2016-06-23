@@ -115,9 +115,10 @@ class RenameReporter(object):
             # TODO How best to sanitize filenames?
             values = [re.sub('[^a-zA-Z0-9_-]', '_', b.data) for b in barcodes]
 
-            # If values contains more than one value then the first time round
-            # the loop, path will be renamed. Subsequent iterations will perform
-            # a copy operation from first_destination.
+            # The first time round the loop, the file will be renamed and
+            # first_destination set to the new filename.
+            # On subsequent iterations, first_destination will copied
+            # to new destinations.
             first_destination = None
             for value in values:
                 dest = path.with_name(u'{0}{1}'.format(value, path.suffix))

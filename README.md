@@ -243,25 +243,25 @@ Install a JDK.
 ## Examples
 Print values of all 1d (Code 128) barcodes using the zbar library:
 
-    ./gouda/bin/decode_barcode.py zbar gouda/test/test_data/code128.png 
+    ./gouda/scripts/decode_barcodes.py zbar gouda/tests/test_data/code128.png
 
 A terse (file per line) report of two files:
 
-    ./gouda/bin/decode_barcode.py zbar --report=terse gouda/test/test_data/code128.png gouda/test/test_data/BM001128287.jpg
+    ./gouda/scripts/decode_barcodes.py zbar --action terse gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
 
 A rich csv report (file per line):
 
-    ./gouda/bin/decode_barcode.py zbar --report=csv gouda/test/test_data/code128.png gouda/test/test_data/BM001128287.jpg
+    ./gouda/scripts/decode_barcodes.py zbar --action csv gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
 
 Reading images as greyscale
 
-    ./gouda/bin/decode_barcode.py zbar --report=csv --greyscale gouda/test/test_data/code128.png gouda/test/test_data/BM001128287.jpg
+    ./gouda/scripts/decode_barcodes.py zbar --action csv --greyscale gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
 
 Greyscale can improve or degrade chances of finding barcodes, dependent upon 
 the image and engine.
 
 
-## Freezing the `decode_barcode` command-line tool
+## Freezing the `decode_barcodes` command-line tool
 
     pip install pyinstaller
 

@@ -1,4 +1,5 @@
 # v0.1.6
+- #12 bin to scripts
 - #7 Travis build failing
 - #5 pep8 and code layout
 

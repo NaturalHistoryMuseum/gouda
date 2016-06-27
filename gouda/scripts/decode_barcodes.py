@@ -3,6 +3,8 @@ from __future__ import print_function
 
 import argparse
 import csv
+import re
+import shutil
 import sys
 import time
 import traceback
@@ -18,9 +20,6 @@ from gouda.util import expand_wildcard, read_image
 from gouda.strategies.roi.roi import roi
 from gouda.strategies.resize import resize
 
-
-# TODO LH Visitor that copies file p to a new file for each decoded barcode
-#         value (see Chris' process)
 
 def decode(paths, strategies, engine, visitors, read_greyscale):
     """Finds and decodes barcodes in images given in paths
@@ -113,19 +112,31 @@ class RenameReporter(object):
         if not barcodes:
             print('  No barcodes')
         else:
-            barcodes = [
-                b.data.replace('(', '-').replace(')', '') for b in barcodes
-            ]
-            fname = '_'.join(barcodes)
-            dest = path.parent / (fname + path.suffix)
-            if path == dest:
-                print('  Already correctly named')
-            elif dest.is_file():
-                msg = '  Cannot rename to [{0}] because destination exists'
-                print(msg.format(dest))
-            else:
-                path.rename(dest)
-                print('  Renamed to [{0}]'.format(dest))
+            # TODO How best to sanitize filenames?
+            values = [re.sub('[^a-zA-Z0-9_-]', '_', b.data) for b in barcodes]
+
+            # The first time round the loop, the file will be renamed and
+            # first_destination set to the new filename.
+            # On subsequent iterations, first_destination will copied
+            # to new destinations.
+            first_destination = None
+            for value in values:
+                dest = path.with_name(u'{0}{1}'.format(value, path.suffix))
+                source = first_destination if first_destination else path
+                rename = not bool(first_destination)
+                if source == dest:
+                    print('  Already correctly named')
+                elif dest.is_file():
+                    msg = '  Cannot rename to [{0}] because destination exists'
+                    print(msg.format(dest))
+                elif rename:
+                    path.rename(dest)
+                    print('  Renamed to [{0}]'.format(dest))
+                else:
+                    shutil.copy2(str(source), str(dest))
+                    print('  Copied to [{0}]'.format(dest))
+                if not first_destination:
+                    first_destination = dest
 
 
 if __name__ == '__main__':

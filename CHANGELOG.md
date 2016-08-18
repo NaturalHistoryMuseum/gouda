@@ -1,3 +1,5 @@
+# v0.1.7
+
 # v0.1.6
 - #12 bin to scripts
 - #10 Rename images based on value of barcodes

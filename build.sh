@@ -12,4 +12,4 @@ nosetests --with-coverage --cover-html --cover-inclusive --cover-erase --cover-t
 
 echo Build
 ./setup.py sdist
-pyinstaller --onefile --specpath=build gouda/scripts/decode_barcodes.py
+pyinstaller --onefile --clean decode_barcodes.spec

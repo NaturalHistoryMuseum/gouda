@@ -1,4 +1,5 @@
 # v0.1.7
+-   #15 Mac OS X build of decode_barcodes
 
 # v0.1.6
 - #12 bin to scripts

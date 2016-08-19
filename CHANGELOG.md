@@ -1,5 +1,6 @@
 # v0.1.7
--   #15 Mac OS X build of decode_barcodes
+- #15 Mac OS X build of decode_barcodes
+- #14 Suffixes to resolve filename collisions
 
 # v0.1.6
 - #12 bin to scripts

@@ -9,7 +9,9 @@ import sys
 import time
 import traceback
 
-import cv2
+from collections import defaultdict
+from itertools import count
+from functools import partial
 
 import gouda
 import gouda.util
@@ -22,7 +24,7 @@ from gouda.strategies.resize import resize
 
 
 def decode(paths, strategies, engine, visitors, read_greyscale):
-    """Finds and decodes barcodes in images given in paths
+    """Finds and decodes barcodes in images given in pathss
     """
     for p in paths:
         if p.is_dir():
@@ -103,9 +105,32 @@ class CSVReportVisitor(object):
                          strategy])
 
 
-class RenameReporter(object):
+class RenameVisitor(object):
     """Renames files based on their barcodes
     """
+    def __init__(self, avoid_collisions):
+        self.avoid_collisions = avoid_collisions
+        # Mapping from path to iterator of integer suffixes, used to avoid
+        # collisions - see self._destination
+        self.suffix = defaultdict(partial(count, start=1))
+
+    def _destination(self, path):
+        """Returns path possibly with a suffix appended to the name to avoid
+        collisions with existing files, iff self.avoid_collisions is True,
+        otherwise path is returned unaltered.
+        """
+        destination = path
+        if self.avoid_collisions:
+            while destination.is_file():
+                fname = u'{0}-{1}{2}'.format(
+                    path.stem,
+                    next(self.suffix[path.name]),
+                    path.suffix
+                )
+                destination = path.with_name(fname)
+
+        return destination
+
     def result(self, path, result):
         strategy, barcodes = result
         print(path)
@@ -122,6 +147,7 @@ class RenameReporter(object):
             first_destination = None
             for value in values:
                 dest = path.with_name(u'{0}{1}'.format(value, path.suffix))
+                dest = self._destination(dest)
                 source = first_destination if first_destination else path
                 rename = not bool(first_destination)
                 if source == dest:
@@ -139,8 +165,8 @@ class RenameReporter(object):
                     first_destination = dest
 
 
-if __name__ == '__main__':
-    # TODO ROI candidate area max and/or min?
+def main(args):
+    # TODO LH ROI candidate area max and/or min?
     # TODO Give area min and max as percentage of total image area?
     # TODO Report barcode regions  - both normalised and absolute coords?
     # TODO Swallow zbar warnings?
@@ -154,6 +180,11 @@ if __name__ == '__main__':
         choices=['basic', 'terse', 'csv', 'rename'], default='basic'
     )
     parser.add_argument('--greyscale', '-g', action='store_true')
+    parser.add_argument(
+        '--avoid-collisions', action='store_true',
+        help=('If the action is "rename", appends a suffix to renamed files to '
+              'prevent collisions')
+    )
 
     options = engine_options()
     if not options:
@@ -164,7 +195,7 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s ' + gouda.__version__)
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     gouda.util.DEBUG_PRINT = args.debug
 
@@ -175,10 +206,14 @@ if __name__ == '__main__':
     elif 'terse' == args.action:
         visitor = TerseReportVisitor()
     elif 'rename' == args.action:
-        visitor = RenameReporter()
+        visitor = RenameVisitor(args.avoid_collisions)
     else:
         visitor = BasicReportVisitor()
 
     strategies = [resize, roi]
     decode(expand_wildcard(args.image), strategies, engine, [visitor],
            args.greyscale)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

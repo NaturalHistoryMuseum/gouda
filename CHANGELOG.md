@@ -1,4 +1,5 @@
 # v0.1.7
+- #14 Suffixes to resolve filename collisions
 
 # v0.1.6
 - #12 bin to scripts

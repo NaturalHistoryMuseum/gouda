@@ -152,7 +152,7 @@ class RenameVisitor(object):
                 rename = not bool(first_destination)
                 if source == dest:
                     print('  Already correctly named')
-                elif dest.is_file() and not self.avoid_collisions:
+                elif dest.is_file():
                     msg = '  Cannot rename to [{0}] because destination exists'
                     print(msg.format(dest))
                 elif rename:

@@ -48,7 +48,7 @@ class TestRename(unittest.TestCase):
             main(['zbar', '--action=rename', unicode(tempdir)])
             self.assertEqual(
                 ['Stegosaurus.png', 'first copy.png', 'second copy.png'],
-                [path.name for path in sorted(tempdir.iterdir())]
+                [path.name for path in sorted(tempdir.iterdir(), key=lambda p: p.name)]
             )
 
     def test_rename_avoid_collisions(self):

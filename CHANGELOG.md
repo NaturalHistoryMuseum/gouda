@@ -1,3 +1,5 @@
+# v0.1.8
+
 # v0.1.7
 - #21 Build scripts to exit on failure
 - #15 Mac OS X build of decode_barcodes

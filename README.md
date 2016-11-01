@@ -97,68 +97,27 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 ### libdmtx
 
-#### Windows
-
-Install the appropriate build of `pydmtx` from
-[dmtx-wrapper](https://github.com/NaturalHistoryMuseum/dmtx-wrappers/) - one of:
-
-    pip install https://github.com/NaturalHistoryMuseum/dmtx-wrappers/releases/download/v0.7.4b1/pydmtx-0.7.4b1-cp27-none-win32.whl
-    pip install https://github.com/NaturalHistoryMuseum/dmtx-wrappers/releases/download/v0.7.4b1/pydmtx-0.7.4b1-cp27-none-win_amd64.whl
-
-Test
-
-    python -c "import pydmtx; print(pydmtx)"
-
 #### Linux
 
-Library and utils
+Install the `libdmtx` shared lib.
 
-    sudo apt-get install libdmtx-dev libdmtx-utils
-
-Python lib
-
-    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers
-    cd dmtx-wrappers/python
-    python setup.py install
-    python -c "import pydmtx; print(pydmtx)"
-    python test.py
+    sudo apt-get install libdmtx0a
 
 #### OS X
 
-Source
+Install the `libdmtx` shared lib.
 
-    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/libdmtx
-    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-wrappers
-    git clone git://libdmtx.git.sourceforge.net/gitroot/libdmtx/dmtx-utils
+    brew install libdmtx
 
-Library
+### All OSes
 
-    cd libdmtx
-    git checkout v0.7.4
-    ./autogen.sh
-    ./configure
-    make
-    make install
+Install Python wrapper
 
-Python lib
+    pip install pylibdmtx
 
-    cd ../dmtx-wrappers/
-    ./autogen.sh
-    ./configure
-    make
+Test
 
-    cd python
-    python setup.py install
-    python -c "import pydmtx; print(pydmtx)"
-
-Command-line tools (not used but might be useful to you)
-
-    cd ../dmtx-utils
-    brew install imagemagick
-    git checkout v0.7.4
-    ./autogen.sh
-    ./configure
-    make
+    python -c "import pylibdmtx; print(pylibdmtx)"
 
 ### Softek
 Linux, OS X and Windows.

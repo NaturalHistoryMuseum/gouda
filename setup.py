@@ -3,7 +3,7 @@ import sys
 
 import gouda
 
-SCRIPTS = ['read_barcodes']
+SCRIPTS = ['decode_barcodes']
 
 URL = 'https://github.com/NaturalHistoryMuseum/gouda/'
 

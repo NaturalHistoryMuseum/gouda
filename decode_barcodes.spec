@@ -61,7 +61,7 @@ elif 'win32' == sys.platform:
     # pylibdmtx
     fname = 'libdmtx-{0}.dll'.format('64' if sys.maxsize > 2**32 else '32')
     a.binaries += TOC([
-        (fname, Path(sys.argv[0]).parent.parent.joinpath(fname), 'BINARY'),
+        (fname, str(Path(sys.argv[0]).parent.parent.joinpath(fname)), 'BINARY'),
     ])
 
 

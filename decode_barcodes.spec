@@ -56,6 +56,14 @@ if 'darwin' == sys.platform:
     a.binaries += TOC([
         (lib, str(LIB.joinpath(lib).resolve()), 'BINARY') for lib in MISSING_DYLIBS
     ])
+elif 'win32' == sys.platform:
+    # libdmtx dylib is not detected because it is loaded by a ctypes call in
+    # pylibdmtx
+    fname = 'libdmtx-{0}.dll'.format('64' if sys.maxsize > 2**32 else '32')
+    a.binaries += TOC([
+        (fname, Path(sys.argv[0]).parent.parent.joinpath(fname), 'BINARY'),
+    ])
+
 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)

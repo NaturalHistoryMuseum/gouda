@@ -19,11 +19,16 @@ a = Analysis(['gouda/scripts/decode_barcodes.py'],
              cipher=block_cipher)
 
 if 'darwin' == sys.platform:
-    # PyInstaller does not detect some dylibs, I think in some cases because they
+    # libdmtx dylib is not detected because it is loaded by a ctypes call in
+    # pylibdmtx
+    a.binaries += TOC([
+        ('libdmtx.dylib', '/usr/local/Cellar/libdmtx/0.7.4/lib/libdmtx.dylib', 'BINARY'),
+    ])
+
+    # PyInstaller does not detect some dylibs, in some cases (I think) because they
     # are symlinked.
     # See Stack Overflow post http://stackoverflow.com/a/17595149 for example
     # of manipulating Analysis.binaries.
-
     MISSING_DYLIBS = (
         'libpng16.16.dylib',
         'libz.1.dylib',

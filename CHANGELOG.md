@@ -1,4 +1,5 @@
 # v0.1.8
+- #24 Support pylibdmtx
 
 # v0.1.7
 - #21 Build scripts to exit on failure

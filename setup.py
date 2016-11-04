@@ -29,8 +29,9 @@ setup_data = {
     },
     'install_requires': [
         # TODO How to specify OpenCV? 'cv2>=2.4.8,<3',
-        'numpy>=1.8.2',
         'pathlib>=1.0.1',
+        'pylibdmtx>=0.1.1',
+        'numpy>=1.8.2',
     ],
     'tests_require': [
         'nose>=1.3.4',

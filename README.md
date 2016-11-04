@@ -97,6 +97,14 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 
 ### libdmtx
 
+The [pylibdmtx](https://pypi.python.org/pypi/pylibdmtx/) Python package is
+a dependency of `gouda` and is listed in `requirements.txt`.
+
+The `libdmtx` `DLL`s are included with the Windows Python wheel builds
+of `pylibdmtx`.
+On other operating systems, you will need to install the `libdmtx` shared
+library.
+
 #### Linux
 
 Install the `libdmtx` shared lib.
@@ -108,16 +116,6 @@ Install the `libdmtx` shared lib.
 Install the `libdmtx` shared lib.
 
     brew install libdmtx
-
-### All OSes
-
-Install Python wrapper
-
-    pip install pylibdmtx
-
-Test
-
-    python -c "import pylibdmtx; print(pylibdmtx)"
 
 ### Softek
 Linux, OS X and Windows.

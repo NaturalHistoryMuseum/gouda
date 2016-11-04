@@ -14,6 +14,7 @@ setup_data = {
     'author': 'Lawrence Hudson',
     'author_email': 'l.hudson@nhm.ac.uk',
     'url': URL,
+    'license': 'MIT',
     'description': gouda.__doc__,
     'long_description': 'Visit {0} for more details.'.format(URL),
     'packages': [

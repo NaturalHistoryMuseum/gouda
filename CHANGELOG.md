@@ -1,3 +1,6 @@
+# v0.1.9
+- #26 Python 3 support
+
 # v0.1.8
 - #24 Support pylibdmtx
 

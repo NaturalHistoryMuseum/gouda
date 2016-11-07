@@ -6,7 +6,5 @@ dist/
 .DS_Store
 .coverage
 htmlcov
-setup.cfg
-gouda/config_dev.py
 cover
-
+.tox

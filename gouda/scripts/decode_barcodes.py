@@ -122,7 +122,7 @@ class RenameVisitor(object):
         destination = path
         if self.avoid_collisions:
             while destination.is_file():
-                fname = u'{0}-{1}{2}'.format(
+                fname = '{0}-{1}{2}'.format(
                     path.stem,
                     next(self.suffix[path.name]),
                     path.suffix
@@ -146,7 +146,7 @@ class RenameVisitor(object):
             # to new destinations.
             first_destination = None
             for value in values:
-                dest = path.with_name(u'{0}{1}'.format(value, path.suffix))
+                dest = path.with_name('{0}{1}'.format(value, path.suffix))
                 dest = self._destination(dest)
                 source = first_destination if first_destination else path
                 rename = not bool(first_destination)

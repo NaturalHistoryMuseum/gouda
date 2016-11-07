@@ -1,7 +1,11 @@
+from __future__ import print_function
+
 from .decode import Decoder
 from .detect import Detector
 from .filter import AreaFilter
 
+
+from pprint import pprint
 
 def roi(img, engine):
     # Regions of the image that might contain barcodes
@@ -21,4 +25,4 @@ def roi(img, engine):
         if barcode.data not in res:
             res[barcode.data] = barcode
 
-    return ('roi', res.values()) if res else None
+    return ('roi', list(res.values()))

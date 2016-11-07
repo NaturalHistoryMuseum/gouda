@@ -15,7 +15,7 @@ def engine_options():
         'zxing': ZxingEngine,
     }
 
-    options = {k: v for k, v in options.iteritems() if v.available()}
+    options = {k: v for k, v in options.items() if v.available()}
 
     if AccusoftEngine.available():
         options.update({

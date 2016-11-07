@@ -7,7 +7,7 @@ from pathlib import Path
 import cv2
 
 try:
-    from _winreg import OpenKey, HKEY_LOCAL_MACHINE
+    from winreg import OpenKey, HKEY_LOCAL_MACHINE
 except ImportError:
     OpenKey = HKEY_LOCAL_MACHINE = None
 

@@ -27,25 +27,25 @@ class TestEngine(unittest.TestCase):
     NOBARCODE = cv2.imread(str(TESTDATA / 'nobarcode.png'))
 
     def _test_1d(self, engine, type='CODE128'):
-        expected = [Barcode(type=type, data='Stegosaurus')]
+        expected = [Barcode(type=type, data=b'Stegosaurus')]
         res = engine(self.CODE128)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
     def _test_dm(self, engine, type='Data Matrix'):
-        expected = [Barcode(type=type, data=u'Triceratops')]
+        expected = [Barcode(type=type, data=b'Triceratops')]
         res = engine(self.DATAMATRIX)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
     def _test_qr(self, engine, type='QR Code'):
-        expected = [Barcode(type=type, data=u'Thalassiodracon')]
+        expected = [Barcode(type=type, data=b'Thalassiodracon')]
         res = engine(self.QRCODE)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))
 
     def _test_pdf417(self, engine, type='PDF 417'):
-        expected = [Barcode(type=type, data=u'Metasequoia')]
+        expected = [Barcode(type=type, data=b'Metasequoia')]
         res = engine(self.PDF417)
         self.assertEqual(expected, res)
         self.assertEqual([], engine(self.NOBARCODE))

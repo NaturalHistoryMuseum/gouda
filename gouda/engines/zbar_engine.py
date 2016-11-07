@@ -40,4 +40,4 @@ class ZbarEngine(object):
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         image = zbar.Image(width, height, 'Y800', img.tostring())
         scanner.scan(image)
-        return [Barcode(str(s.type), unicode(s.data, 'utf8')) for s in image]
+        return [Barcode(s.type, s.data) for s in image]

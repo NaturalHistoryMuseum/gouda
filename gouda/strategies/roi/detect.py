@@ -6,6 +6,7 @@ import numpy as np
 from .rect import Rect
 from gouda.util import debug_print
 
+# debug_print = print
 
 class Detector(object):
     """Detects candidate barcode areas in an image
@@ -89,9 +90,11 @@ class Detector(object):
 
         debug_print('Contours')
         cont_img = closing.copy()
+        # Taking only the last two elements of the sequence returned by
+        # findContours makes the code tolerant of OpenCV 2.4.x and 3.x
         contours, hierarchy = cv2.findContours(
             cont_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
-        )
+        )[-2:]
 
         working_images = {
             'resized': resized,
@@ -102,7 +105,9 @@ class Detector(object):
             'closing': closing,
             }
 
+
         candidates = [cv2.boundingRect(c) for c in contours]
+
         candidates = [
             Rect(x, y, width, height) for x, y, width, height in candidates
         ]

@@ -30,10 +30,12 @@ setup_data = {
     },
     'install_requires': [
         # TODO How to specify OpenCV? 'cv2>=2.4.8,<3',
-        'pathlib>=1.0.1',
         'pylibdmtx>=0.1.1',
         'numpy>=1.8.2',
     ],
+    'extras_require': {
+        ':python_version=="2.7"': ['pathlib>=1.0.1'],
+    },
     'tests_require': [
         'nose>=1.3.4',
     ],
@@ -43,7 +45,10 @@ setup_data = {
         'Topic :: Utilities',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-    ]
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+    ],
 }
 
 
@@ -52,7 +57,7 @@ def setuptools_setup():
     setup(**setup_data)
 
 
-if (2, 7) == sys.version_info[:2]:
+if (2, 7) == sys.version_info[:2] or (3, 4) <= sys.version_info:
     setuptools_setup()
 else:
-    sys.exit('Only Python 2.7 is supported')
+    sys.exit('Python versions 2.7 and >= 3.4 are supported')

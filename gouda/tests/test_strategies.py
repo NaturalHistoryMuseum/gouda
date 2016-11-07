@@ -37,14 +37,14 @@ class TestStrategies(unittest.TestCase):
         return method, barcodes
 
     def _test_1d(self, strategy):
-        expected = ['BM001128286', 'BM001128287', 'BM001128288']
+        expected = [b'BM001128286', b'BM001128287', b'BM001128288']
         return self._test('BM001128287.jpg',
                           self.ONED_ENGINE,
                           strategy,
                           expected)
 
     def _test_dm(self, strategy):
-        expected = ['1265025']
+        expected = [b'1265025']
         return self._test('BMNHE_1265025.jpg',
                           self.DM_ENGINE,
                           strategy,

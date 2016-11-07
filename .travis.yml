@@ -10,13 +10,15 @@ python:
 virtualenv:
   system_site_packages: true
 
-install:
+before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y --fix-missing libdmtx0a python-opencv
-  - pip install -r requirements.pip
+  - sudo apt-get install -y libdmtx0a python-opencv
+
+install:
+  - pip install tox-travis coveralls
 
 script:
-- nosetests
+  - tox
 
 after_success:
   - coveralls

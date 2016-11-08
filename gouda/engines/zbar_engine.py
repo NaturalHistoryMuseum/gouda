@@ -1,22 +1,22 @@
 # This file is not called zbar.py to avoid collision with the zbar package
 
-import cv2
-
 from gouda.barcode import Barcode
 from gouda.gouda_error import GoudaError
 from gouda.util import debug_print
 
+from PIL import Image
+
 try:
-    import zbar
+    from pyzbar import pyzbar
 except ImportError:
-    zbar = None
+    pyzbar = None
 
 
 class ZbarEngine(object):
     """Decode using the zbar library
 
     http://sourceforge.net/projects/zbar/
-    https://pypi.python.org/pypi/zbar
+    https://pypi.python.org/pypi/pyzbar
     """
     def __init__(self):
         if not self.available():
@@ -24,20 +24,11 @@ class ZbarEngine(object):
 
     @classmethod
     def available(cls):
-        return zbar is not None
+        return pyzbar is not None
 
     def decode_file(self, path):
-        return self(cv2.imread(str(path), cv2.IMREAD_GRAYSCALE))
+        return self(Image.open(str(path)))
 
     def __call__(self, img):
-        # Decode barcodes in img using zbar
-        # https://github.com/ZBar/ZBar/blob/master/python/README
-        # https://github.com/herbyme/zbar/blob/master/python/examples/scan_image.py
-        scanner = zbar.ImageScanner()
-        height, width = img.shape[:2]
-        if 'uint8' != img.dtype or 2 != len(img.shape):
-            debug_print('Convert to greyscale for zbar')
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        image = zbar.Image(width, height, 'Y800', img.tostring())
-        scanner.scan(image)
-        return [Barcode(str(s.type), unicode(s.data, 'utf8')) for s in image]
+        # Decode barcodes in img using pyzbar
+        return [Barcode(r.type, r.data) for r in pyzbar.decode(img)]

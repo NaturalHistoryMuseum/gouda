@@ -15,5 +15,5 @@ echo Tests
 nosetests --with-coverage --cover-html --cover-inclusive --cover-erase --cover-tests --cover-package=gouda
 
 echo Build
-./setup.py bdist
+./setup.py bdist_wheel
 pyinstaller --onefile --clean decode_barcodes.spec

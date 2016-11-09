@@ -25,4 +25,4 @@ def roi(img, engine):
         if barcode.data not in res:
             res[barcode.data] = barcode
 
-    return ('roi', list(res.values()))
+    return ('roi', list(res.values())) if res else None

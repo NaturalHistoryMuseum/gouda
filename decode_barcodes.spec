@@ -1,8 +1,12 @@
-# For PyInstaller build on Mac
+# For PyInstaller build
 
 import sys
 
 from pathlib import Path
+
+from pylibdmtx import pylibdmtx
+from pyzbar import pyzbar
+
 
 block_cipher = None
 
@@ -18,13 +22,14 @@ a = Analysis(['gouda/scripts/decode_barcodes.py'],
              win_private_assemblies=False,
              cipher=block_cipher)
 
-if 'darwin' == sys.platform:
-    # libdmtx dylib is not detected because it is loaded by a ctypes call in
-    # pylibdmtx
-    a.binaries += TOC([
-        ('libdmtx.dylib', '/usr/local/Cellar/libdmtx/0.7.4/lib/libdmtx.dylib', 'BINARY'),
-    ])
 
+# dylibs not detected because they are loaded by ctypes
+a.binaries += TOC([
+    (Path(dep._name).name, dep._name, 'BINARY')
+    for dep in pylibdmtx.EXTERNAL_DEPENDENCIES + pyzbar.EXTERNAL_DEPENDENCIES
+])
+
+if 'darwin' == sys.platform:
     # PyInstaller does not detect some dylibs, in some cases (I think) because they
     # are symlinked.
     # See Stack Overflow post http://stackoverflow.com/a/17595149 for example
@@ -55,13 +60,6 @@ if 'darwin' == sys.platform:
     # Find the source for each library and add it to the list of binaries
     a.binaries += TOC([
         (lib, str(LIB.joinpath(lib).resolve()), 'BINARY') for lib in MISSING_DYLIBS
-    ])
-elif 'win32' == sys.platform:
-    # libdmtx dylib is not detected because it is loaded by a ctypes call in
-    # pylibdmtx
-    fname = 'libdmtx-{0}.dll'.format('64' if sys.maxsize > 2**32 else '32')
-    a.binaries += TOC([
-        (fname, str(Path(sys.argv[0]).parent.parent.joinpath(fname)), 'BINARY'),
     ])
 
 

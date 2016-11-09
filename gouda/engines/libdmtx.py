@@ -1,7 +1,7 @@
 import subprocess
 import tempfile
 
-import cv2
+from PIL import Image
 
 from gouda import config
 from gouda.barcode import Barcode
@@ -31,7 +31,7 @@ class LibDMTXEngine(object):
         return pylibdmtx is not None
 
     def decode_file(self, path):
-        return self(cv2.imread(str(path)))
+        return self(Image.open(str(path)))
 
     def __call__(self, img):
         res = pylibdmtx.decode(

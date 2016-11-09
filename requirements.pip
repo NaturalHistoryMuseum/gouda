@@ -1,5 +1,6 @@
 pathlib>=1.0; python_version == '2.7'
-pylibdmtx>=0.1.2
+pylibdmtx==0.1.4
+pyzbar==0.1.2
 numpy>=1.8.2
 
 # Packages required for testing

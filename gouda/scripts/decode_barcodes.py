@@ -26,7 +26,7 @@ from gouda.strategies.resize import resize
 def decode(paths, strategies, engine, visitors, read_greyscale):
     """Finds and decodes barcodes in images given in pathss
     """
-    for p in paths:
+    for p in sorted(paths):
         if p.is_dir():
             # Descend into directory
             decode(p.iterdir(), strategies, engine, visitors, read_greyscale)

@@ -6,13 +6,12 @@ sudo:
 
 python:
   - "2.7"
-
-virtualenv:
-  system_site_packages: true
+  - "3.4"
+  - "3.5"
 
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y libdmtx0a python-opencv
+  - sudo apt-get install -y libdmtx0a libzbar0 python-opencv
 
 install:
   - pip install tox-travis coveralls

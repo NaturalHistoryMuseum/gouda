@@ -10,5 +10,5 @@ from .libdmtx import LibDMTXEngine
 from .inlite import InliteEngine
 from .softek import SoftekEngine
 from .stecos import StecosEngine
-from .zbar_engine import ZbarEngine
+from .zbar import ZbarEngine
 from .zxing import ZxingEngine

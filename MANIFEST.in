@@ -1,2 +1,3 @@
 include *.py
-include requirements.txt
+include requirements.pip
+include gouda/tests/test_data/*png

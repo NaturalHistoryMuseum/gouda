@@ -1,3 +1,6 @@
+# v0.1.9
+- #27 Support pyzbar
+
 # v0.1.8
 - #24 Support pylibdmtx
 

@@ -32,6 +32,7 @@ setup_data = {
         # TODO How to specify OpenCV? 'cv2>=2.4.8,<3',
         'pathlib>=1.0.1',
         'pylibdmtx>=0.1.1',
+        'pyzbar>=0.1.1',
         'numpy>=1.8.2',
     ],
     'tests_require': [

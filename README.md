@@ -55,7 +55,7 @@ The easiest way is to install the current Python 2.7 release of
     conda update --all
     pip install --upgrade pip
     python <Anaconda dir>\Scripts\pywin32_postinstall.py -install
-    pip install -r requirements.txt
+    pip install -r requirements.pip
 
 ## Install [OpenCV](http://www.opencv.org/)
 ### Linux
@@ -98,7 +98,7 @@ Windows only. Download and install their [SDK](http://www.inliteresearch.com/).
 ### libdmtx
 
 The [pylibdmtx](https://pypi.python.org/pypi/pylibdmtx/) Python package is
-a dependency of `gouda` and is listed in `requirements.txt`.
+a dependency of `gouda` and is listed in `requirements.pip`.
 
 The `libdmtx` `DLL`s are included with the Windows Python wheel builds
 of `pylibdmtx`.

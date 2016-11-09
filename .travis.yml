@@ -12,11 +12,11 @@ virtualenv:
 
 install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y --fix-missing libdmtx0a python-opencv
-  - pip install -r requirements.txt
+  - sudo apt-get install -y --fix-missing libdmtx0a libzbar0 python-opencv
+  - pip install -r requirements.pip
 
 script:
-- nosetests
+  - python -m nose --verbose --with-coverage --cover-inclusive --cover-tests --cover-package=gouda gouda
 
 after_success:
   - coveralls

@@ -22,8 +22,10 @@ def debug_print(*args, **kwargs):
 
 
 def read_image(path, greyscale):
-    flags = cv2.IMREAD_GRAYSCALE if greyscale else cv2.IMREAD_UNCHANGED
-    return cv2.imread(str(path), flags)
+    if greyscale:
+        return cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+    else:
+        return cv2.imread(str(path))
 
 
 def expand_wildcard(args):

@@ -138,7 +138,9 @@ class RenameVisitor(object):
             print('  No barcodes')
         else:
             # TODO How best to sanitize filenames?
-            values = [re.sub('[^a-zA-Z0-9_-]', '_', b.data) for b in barcodes]
+            values = [
+                re.sub('[^a-zA-Z0-9_-]', '_', b.data.decode()) for b in barcodes
+            ]
 
             # The first time round the loop, the file will be renamed and
             # first_destination set to the new filename.

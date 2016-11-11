@@ -6,18 +6,17 @@ sudo:
 
 python:
   - "2.7"
-  - "3.4"
-  - "3.5"
 
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libdmtx0a libzbar0 python-opencv
+virtualenv:
+  system_site_packages: true
 
 install:
-  - pip install tox-travis coveralls
+  - sudo apt-get -qq update
+  - sudo apt-get install -y --fix-missing libdmtx0a libzbar0 python-opencv
+  - pip install -r requirements.pip
 
 script:
-  - tox
+  - python -m nose --verbose --with-coverage --cover-inclusive --cover-tests --cover-package=gouda gouda
 
 after_success:
   - coveralls

@@ -29,7 +29,8 @@ setup_data = {
             ['{0}=gouda.scripts.{0}:main'.format(script) for script in SCRIPTS],
     },
     'install_requires': [
-        # TODO How to specify OpenCV? 'cv2>=2.4.8,<3',
+        # TODO How to specify OpenCV? 'cv2>=2.4.8'
+        'Pillow>=3.2.0',
         'pylibdmtx>=0.1.4',
         'pyzbar>=0.1.2',
         'numpy>=1.8.2',
@@ -37,9 +38,6 @@ setup_data = {
     'extras_require': {
         ':python_version=="2.7"': ['pathlib>=1.0.1'],
     },
-    'tests_require': [
-        'nose>=1.3.4',
-    ],
     'classifiers': [
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',

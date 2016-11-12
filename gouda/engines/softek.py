@@ -178,7 +178,7 @@ class Win32SoftekEngine(object):
     def decode_file(self, path):
         self.d.ScanBarCode(str(path))
         barcodes = [None] * self.d.BarCodeCount
-        for i in xrange(0, self.d.BarCodeCount):
+        for i in range(0, self.d.BarCodeCount):
             barcodes[i] = Barcode(str(self.d.BarStringType(1+i)),
                                   self.d.BarString(1+i))
         return barcodes

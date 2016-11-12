@@ -1,3 +1,6 @@
+# v0.1.10
+- #26 Python 3 support
+
 # v0.1.9
 - #27 Support pyzbar
 

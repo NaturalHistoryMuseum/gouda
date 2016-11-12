@@ -41,7 +41,7 @@ class TestRect(unittest.TestCase):
         self.assertEqual(Point(2, 4), self.R.bottomright)
 
     def test_centre(self):
-        self.assertEqual(Point(1, 2), self.R.centre)
+        self.assertEqual(Point(1.0, 2.5), self.R.centre)
 
     def test_comparison(self):
         a = Rect(0, 1, 2, 3)

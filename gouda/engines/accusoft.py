@@ -59,7 +59,7 @@ class AccusoftEngine(object):
                 # TODO LH Who owns dib?
                 res = windll.kernel32.GlobalFree(dib)
                 if res:
-                    print('Error freeing global handle [{0}]'.format(
+                    debug_print('Error freeing global handle [{0}]'.format(
                         win32api.GetLastError()
                     ))
             self.ie.FileName = ''

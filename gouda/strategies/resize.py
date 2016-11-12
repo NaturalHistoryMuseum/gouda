@@ -17,7 +17,7 @@ def resize(img, engine):
     for sharpening in (0, 1, 2):
         if sharpening > 0:
             img = _unsharpmask(img)
-        for f in [round(x * 0.01, 2) for x in xrange(100, 0, -5)]:
+        for f in [round(x * 0.01, 2) for x in range(100, 0, -5)]:
             msg = 'resize: scaling factor [{0}] sharpening [{1}]'
             msg = msg.format(f, sharpening)
             debug_print(msg)

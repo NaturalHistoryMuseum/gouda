@@ -1,4 +1,3 @@
-
 import os
 import tempfile
 
@@ -80,7 +79,7 @@ class DTKEngine(object):
     def decode_file(self, path):
         self.d.ReadFromFile(str(path))
         barcodes = [None] * self.d.Barcodes.Count
-        for i in xrange(0, self.d.Barcodes.Count):
+        for i in range(0, self.d.Barcodes.Count):
             b = self.d.Barcodes.Item(i)
             barcodes[i] = Barcode(self.types.get(b.Type, 'Unknown'),
                                   b.BarcodeString)

@@ -25,8 +25,9 @@ setup_data = {
     'test_suite': 'gouda.tests',
     'scripts': ['gouda/scripts/{0}.py'.format(script) for script in SCRIPTS],
     'entry_points': {
-        'console_scripts':
-            ['{0}=gouda.scripts.{0}:main'.format(script) for script in SCRIPTS],
+        'console_scripts': [
+            '{0}=gouda.scripts.{0}:main'.format(script) for script in SCRIPTS
+        ],
     },
     'install_requires': [
         # TODO How to specify OpenCV? 'cv2>=2.4.8'

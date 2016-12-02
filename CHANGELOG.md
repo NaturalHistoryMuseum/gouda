@@ -1,3 +1,6 @@
+# v0.1.11
+- #31 Universal wheel
+
 # v0.1.10
 - #26 Python 3 support
 

@@ -1,3 +1,6 @@
+# v0.1.12
+- #33 decode_barcodes csv error
+
 # v0.1.11
 - #31 Universal wheel
 

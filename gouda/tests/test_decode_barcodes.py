@@ -1,7 +1,16 @@
+import os
 import unittest
 import shutil
+import sys
 
 from pathlib import Path
+from contextlib import contextmanager
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 from gouda.engines import ZbarEngine
 from gouda.scripts.decode_barcodes import main
@@ -9,11 +18,49 @@ from gouda.scripts.decode_barcodes import main
 from .utils import temp_directory_with_files
 
 
+
+@contextmanager
+def capture_stdout():
+    sys.stdout, old_stdout = StringIO(), sys.stdout
+    try:
+        yield sys.stdout
+    finally:
+        sys.stdout = old_stdout
+
+
 TESTDATA = Path(__file__).parent.joinpath('test_data')
 
 
 @unittest.skipUnless(ZbarEngine.available(), 'ZbarEngine unavailable')
 class TestRename(unittest.TestCase):
+    def test_csv(self):
+        "CSV report is printed"
+        with capture_stdout() as stdout:
+            main([
+                'zbar',
+                '--action=csv',
+                str(TESTDATA.joinpath('code128.png')),
+                str(TESTDATA.joinpath('BM001128287.jpg'))
+            ])
+        from pprint import pprint
+
+        lines = stdout.getvalue().strip().split(os.linesep)
+        self.assertEqual(3, len(lines))
+
+        header = (
+            'OS,Engine,Directory,File,Image.conversion,Elapsed,N.found,Types,'
+            'Values,Strategy'
+        )
+        self.assertEqual(header, lines[0])
+
+        self.assertIn('BM001128287.jpg', lines[1])
+        self.assertIn('CODE128|CODE128|CODE128', lines[1])
+        self.assertIn('BM001128287|BM001128286|BM001128288', lines[1])
+
+        self.assertIn('code128.png', lines[2])
+        self.assertIn('CODE128', lines[2])
+        self.assertIn('Stegosaurus', lines[2])
+
     def test_rename(self):
         "File is renamed with value of barcode"
         with temp_directory_with_files(TESTDATA.joinpath('code128.png')) as tempdir:

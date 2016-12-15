@@ -79,8 +79,8 @@ class TerseReportVisitor(object):
 class CSVReportVisitor(object):
     """Writes a CSV report
     """
-    def __init__(self, engine, greyscale, file=sys.stdout):
-        self.w = csv.writer(file, lineterminator='\n')
+    def __init__(self, engine, greyscale, file=None):
+        self.w = csv.writer(file if file else sys.stdout, lineterminator='\n')
         self.w.writerow([
             'OS', 'Engine', 'Directory', 'File', 'Image.conversion',
             'Elapsed', 'N.found', 'Types', 'Values', 'Strategy'
@@ -92,7 +92,12 @@ class CSVReportVisitor(object):
     def result(self, path, result):
         strategy, barcodes = result
         types = '|'.join(b.type for b in barcodes)
-        values = '|'.join(b.data for b in barcodes)
+        # data could be either str or bytes
+        values = '|'.join(
+            b.data.decode() if hasattr(b.data, 'decode') else b.data
+            for b in barcodes
+        )
+
         self.w.writerow([sys.platform,
                          self.engine,
                          path.parent.name,

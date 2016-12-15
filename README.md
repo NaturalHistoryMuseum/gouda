@@ -42,7 +42,7 @@ Not all libraries are available on all OSes. Gouda engines are currently
 hard-coded to detect either Data Matrix or Code 128 + Code 39 barcodes -
 those used by the [Natural History Musem](http://www.nhm.ac.uk/).
 
-## gouda/strategies
+## `gouda/strategies`
 No engines are capable of reliably locating and decoding (possibly multiple)
 barcodes. Gouda provides two strategies to help the decoding engines.
 If strategy A finds no barcodes, strategy B is attempted.
@@ -193,7 +193,7 @@ Install a JDK.
 
 ## Unit tests
 
-    python -m unittest discover
+    nosetests
 
 ## `decode_barcodes` script
 These examples illustrate running the script from source.

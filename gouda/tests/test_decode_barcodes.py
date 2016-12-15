@@ -1,4 +1,3 @@
-import os
 import unittest
 import shutil
 import sys
@@ -42,9 +41,8 @@ class TestRename(unittest.TestCase):
                 str(TESTDATA.joinpath('code128.png')),
                 str(TESTDATA.joinpath('BM001128287.jpg'))
             ])
-        from pprint import pprint
 
-        lines = stdout.getvalue().strip().split(os.linesep)
+        lines = stdout.getvalue().strip().split('\n')
         self.assertEqual(3, len(lines))
 
         header = (

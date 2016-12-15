@@ -9,13 +9,13 @@ A python package for decoding barcodes, possibly more than one, in complex
 images such as scans of museum specimens.
 
 Gouda supports Python 2.7, 3.4 and 3.5. A universal wheel build is available
-on the [https://github.com/NaturalHistoryMuseum/gouda/releases](releases) page.
+on the [releases](https://github.com/NaturalHistoryMuseum/gouda/releases) page.
 
 A command-line program `decode_barcodes` is available for Windows 64-bit and
 Mac OS X. It reads barcode values in individual images and in batches of images
 files in a directory. It can print values to CSV and can rename files with
 the value(s) or barcode(s). Download from the
-[https://github.com/NaturalHistoryMuseum/gouda/releases](releases) page.
+[releases](https://github.com/NaturalHistoryMuseum/gouda/releases) page.
 For help run
 
     decode_barcodes --help

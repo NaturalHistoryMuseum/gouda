@@ -200,31 +200,42 @@ If you downloaded `decode_barcodes` you should replace
 `python -m gouda.scripts.decode_barcodes` with `decode_barcodes` in the
 following examples.
 
-Print values of all 1d (Code 128) barcodes using the zbar library:
+### Print values of all 1d (Code 128) barcodes using the zbar library:
 
     python -m gouda.scripts.decode_barcodes zbar gouda/tests/test_data/code128.png
+    gouda/tests/test_data/code128.png
+    Found [1] barcodes:
+    [0] [CODE128] [b'Stegosaurus']
 
-A terse (file per line) report of two files:
+
+### A terse (file per line) report of two files:
 
     python -m gouda.scripts.decode_barcodes zbar --action terse gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
+    gouda/tests/test_data/BM001128287.jpg [b'BM001128287'] [b'BM001128286'] [b'BM001128288']
+    gouda/tests/test_data/code128.png [b'Stegosaurus']
 
-A rich csv report (file per line):
+
+### A rich csv report (file per line):
 
     python -m gouda.scripts.decode_barcodes zbar --action csv gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
+    OS,Engine,Directory,File,Image.conversion,Elapsed,N.found,Types,Values,Strategy
+    darwin,zbar,test_data,BM001128287.jpg,Unchanged,0.7893128395080566,3,CODE128|CODE128|CODE128,BM001128287|BM001128286|BM001128288,resize: scaling factor [1.0] sharpening [0]
+    darwin,zbar,test_data,code128.png,Unchanged,0.7991600036621094,1,CODE128,Stegosaurus,resize: scaling factor [1.0] sharpening [0]
 
-Reading images as greyscale
-
-    python -m gouda.scripts.decode_barcodes zbar --action csv --greyscale gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
-
+### Reading images as greyscale
 Greyscale can improve or degrade chances of finding barcodes, dependent upon 
 the image and engine.
 
+    python -m gouda.scripts.decode_barcodes zbar --action csv --greyscale gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
+    OS,Engine,Directory,File,Image.conversion,Elapsed,N.found,Types,Values,Strategy
+    darwin,zbar,test_data,BM001128287.jpg,Greyscale,0.9049880504608154,3,CODE128|CODE128|CODE128,BM001128287|BM001128286|BM001128288,resize: scaling factor [1.0] sharpening [0]
+    darwin,zbar,test_data,code128.png,Greyscale,0.9112460613250732,1,CODE128,Stegosaurus,resize: scaling factor [1.0] sharpening [0]
 
-## Freezing the `decode_barcodes` command-line tool
+## Building a release
 
-On Linux or Mac OS X
+Mac OS X
 
-    build.sh
+    ./build.sh
 
 On Windows
 

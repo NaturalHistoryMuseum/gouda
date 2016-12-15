@@ -8,9 +8,21 @@ Disabled due to lack of availability of recent Open CV build
 A python package for decoding barcodes, possibly more than one, in complex
 images such as scans of museum specimens.
 
-## gouda/engines
-Barcode decoding engines. An engine is an interface to a barcode reading 
-library. Engines for both open-source and commercial libraries are provided.
+Gouda supports Python 2.7, 3.4 and 3.5. A universal wheel build is available
+on the Releases page.
+
+A command-line program `decode_barcodes` is available for Windows 64-bit and
+Mac OS X. It reads barcode values in individual images and in batches of images
+files in a directory. It can print values to CSV and can renaming files with
+the value(s) or barcode(s). Download from the Releases tab. For information run
+
+    decode_barcodes --help
+
+See also the [`decode_barcodes` examples](#decode_barcodes-examples) below.
+
+## `gouda/engines`
+An engine is an interface to a barcode reading library.
+Gouda has engines for a number of open-source and commercial libraries.
 
 ### Open source
 * [libdmtx](http://www.libdmtx.org/)
@@ -48,14 +60,15 @@ If strategy A finds no barcodes, strategy B is attempted.
 # Installation
 
 ## Python
+**TODO** These instructions need updating for Python 3.
 The easiest way is to install the current Python 2.7 release of
 [Anaconda](https://store.continuum.io/cshop/anaconda/):
 
     conda update --all
-    conda update --all
     pip install --upgrade pip
-    python <Anaconda dir>\Scripts\pywin32_postinstall.py -install
     pip install -r requirements.pip
+    conda install pywin32=220
+    FOR /F %a IN ('python -c "import sys; print(sys.exec_prefix)"') DO %a\python %a\Scripts\pywin32_postinstall.py -install
 
 ## Install [OpenCV](http://www.opencv.org/)
 ### Linux
@@ -68,7 +81,7 @@ The easiest way is to install the current Python 2.7 release of
 
 ### Windows
 
-Download [OpenCV 2.4.11](http://opencv.org/) and extract to `c:\opencv\`
+Download [OpenCV 2.4.13](http://opencv.org/) and extract to `c:\opencv\`
 If you installed 32-bit Anaconda:
 
     FOR /F %a IN ('python -c "import sys; print(sys.exec_prefix)"') DO copy C:\opencv\build\python\2.7\x86\cv2.pyd %a\DLLs
@@ -147,30 +160,18 @@ Alter the readDM and readbar programs to print decoded data in the form
 apps respectively, provided with the SDK.
 
 ### zbar
-#### Linux without anaconda
+
+The [pyzbar](https://pypi.python.org/pypi/pyzbar/) Python package is
+a dependency of `gouda` and is listed in `requirements.pip`.
+
+The `zbar` `DLL`s are included with the Windows Python wheel builds
+of `pyzbar`.
+On other operating systems, you will need to install the `zbar` shared
+library.
+
+#### Linux
 
     sudo apt-get install libzbar-dev
-    pip install zbar
-
-#### Linux anaconda
-
-    conda install --channel https://conda.binstar.org/weiyan zbar
-
-#### Windows 32-bit
-Install the latest release of
-[zbar](https://github.com/NaturalHistoryMuseum/zbar-python-patched/):
-
-    pip install https://github.com/NaturalHistoryMuseum/zbar-python-patched/releases/download/v0.10/zbar-0.10-cp27-none-win32.whl
-
-#### Windows 64-bit
-Install the latest release of
-[zbar](https://github.com/NaturalHistoryMuseum/ZBarWin64/):
-
-    pip install https://github.com/NaturalHistoryMuseum/ZBarWin64/releases/download/v0.10/zbar-0.10-cp27-none-win_amd64.whl
-
-Test
-
-    python -c "import zbar; print(zbar)"
 
 #### Mac
 
@@ -178,12 +179,7 @@ Install the `zbar` library
 
     brew install zbar
 
-Install the latest release of
-[zbar](https://github.com/NaturalHistoryMuseum/zbar-python-patched/):
-
-    pip install https://github.com/NaturalHistoryMuseum/zbar-python-patched/archive/v0.10.tar.gz
-
-Test
+#### Test
 
     python -c "import zbar; print(zbar)"
 
@@ -193,34 +189,37 @@ Install a JDK.
     cd gouda/java/decode_data_matrix/
     ./build.sh
 
-## Test
+## Unit tests
 
     python -m unittest discover
 
-## Examples
+## `decode_barcodes` script
+These examples illustrate running the script from source.
+If you downloaded `decode_barcodes` you should replace
+`python -m gouda.scripts.decode_barcodes` with `decode_barcodes` in the
+following examples.
+
 Print values of all 1d (Code 128) barcodes using the zbar library:
 
-    ./gouda/scripts/decode_barcodes.py zbar gouda/tests/test_data/code128.png
+    python -m gouda.scripts.decode_barcodes zbar gouda/tests/test_data/code128.png
 
 A terse (file per line) report of two files:
 
-    ./gouda/scripts/decode_barcodes.py zbar --action terse gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
+    python -m gouda.scripts.decode_barcodes zbar --action terse gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
 
 A rich csv report (file per line):
 
-    ./gouda/scripts/decode_barcodes.py zbar --action csv gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
+    python -m gouda.scripts.decode_barcodes zbar --action csv gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
 
 Reading images as greyscale
 
-    ./gouda/scripts/decode_barcodes.py zbar --action csv --greyscale gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
+    python -m gouda.scripts.decode_barcodes zbar --action csv --greyscale gouda/tests/test_data/code128.png gouda/tests/test_data/BM001128287.jpg
 
 Greyscale can improve or degrade chances of finding barcodes, dependent upon 
 the image and engine.
 
 
 ## Freezing the `decode_barcodes` command-line tool
-
-    pip install pyinstaller
 
 On Linux or Mac OS X
 

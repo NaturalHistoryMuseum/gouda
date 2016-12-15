@@ -9,16 +9,17 @@ A python package for decoding barcodes, possibly more than one, in complex
 images such as scans of museum specimens.
 
 Gouda supports Python 2.7, 3.4 and 3.5. A universal wheel build is available
-on the Releases page.
+on the [releases](releases) pages.
 
 A command-line program `decode_barcodes` is available for Windows 64-bit and
 Mac OS X. It reads barcode values in individual images and in batches of images
-files in a directory. It can print values to CSV and can renaming files with
-the value(s) or barcode(s). Download from the Releases tab. For information run
+files in a directory. It can print values to CSV and can rename files with
+the value(s) or barcode(s). Download from the [releases](releases) page.
+For help run
 
     decode_barcodes --help
 
-See also the [`decode_barcodes` examples](#decode_barcodes-examples) below.
+See also the [examples](#decode_barcodes-script) below.
 
 ## `gouda/engines`
 An engine is an interface to a barcode reading library.

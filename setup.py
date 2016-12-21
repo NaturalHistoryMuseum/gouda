@@ -32,7 +32,7 @@ setup_data = {
     'install_requires': [
         # TODO How to specify OpenCV? 'cv2>=2.4.8'
         'Pillow>=3.2.0',
-        'pylibdmtx>=0.1.5',
+        'pylibdmtx>=0.1.6',
         'pyzbar>=0.1.3',
         'numpy>=1.8.2',
     ],

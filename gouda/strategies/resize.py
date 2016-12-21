@@ -10,11 +10,15 @@ def _unsharpmask(img):
     return cv2.addWeighted(img, 3, blur, -2, 0)
 
 
-# Minimum number of pixel along each edge. What is a sensible minimum?
-MINIMUM_PIXELS = 10
 
-def resize(img, engine):
+def resize(img, engine, minimum_pixels=10):
     # Entire image at different fractions of original size
+
+    # Minimum number of pixel along each edge.
+    if minimum_pixels < 0:
+        raise ValueError('Invalid value for minimum_pixels: [{0}]'.format(
+            minimum_pixels
+        ))
 
     # TODO LH try more sharpening, equalisation, other stuff?
     for sharpening in (0, 1, 2):
@@ -32,7 +36,7 @@ def resize(img, engine):
                 # width are greater than the minimum.
                 # cv2.resize raises an error if either dimension is zero.
                 dsize = (int(round(height * factor)), int(round(width * factor)))
-                if dsize[0] >= MINIMUM_PIXELS and dsize[1] >= MINIMUM_PIXELS:
+                if dsize[0] >= minimum_pixels and dsize[1] >= minimum_pixels:
                     resized = cv2.resize(img, dsize)
                 else:
                     # No point in continuing to shrink

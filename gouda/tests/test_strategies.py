@@ -64,8 +64,6 @@ class TestStrategies(unittest.TestCase):
 
     @unittest.skipUnless(DM_ENGINE,
                          'No available engine for reading Data Matrix codes')
-    @unittest.skipUnless(hasattr(cv2, 'createCLAHE'),
-                         'Older cv2 without createCLAHE')
     def test_dm_resize(self):
         self._test_dm(resize)
 
@@ -89,6 +87,25 @@ class TestStrategies(unittest.TestCase):
     def test_no_barcode_roi(self):
         img = cv2.imread(str(TESTDATA / 'nobarcode.png'))
         self.assertIsNone(roi(img, self.ONED_ENGINE))
+
+    @unittest.skipUnless(DM_ENGINE or ONED_ENGINE,
+                         'No available engine')
+    def test_resize_minimum_value(self):
+        img = cv2.imread(str(TESTDATA / 'nobarcode.png'))
+        engine = self.DM_ENGINE if self.DM_ENGINE else self.ONED_ENGINE
+        self.assertRaises(ValueError, resize, img, engine, minimum_pixels=0)
+
+    @unittest.skipUnless(DM_ENGINE or ONED_ENGINE,
+                         'No available engine')
+    def test_resize_tiny_image(self):
+        "The resize strategy is given a very small image with no barcode"
+        # Test that the resize strategy can cope with very small images without
+        # cv2.resize raising an error
+        img = cv2.imread(str(TESTDATA / 'nobarcode.png'))
+        img = img[0:10, 0:10]
+        engine = self.DM_ENGINE if self.DM_ENGINE else self.ONED_ENGINE
+        self.assertIsNone(resize(img, engine))
+        self.assertIsNone(resize(img, engine, minimum_pixels=3))
 
 
 if __name__ == '__main__':

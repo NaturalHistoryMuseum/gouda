@@ -1,3 +1,6 @@
+# v0.1.13
+- #35 resize strategy minimum
+
 # v0.1.12
 - #33 decode_barcodes csv error
 

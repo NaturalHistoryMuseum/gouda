@@ -15,7 +15,7 @@ def resize(img, engine, minimum_pixels=10):
     # Entire image at different fractions of original size
 
     # Minimum number of pixel along each edge.
-    if minimum_pixels < 0:
+    if minimum_pixels < 3:
         raise ValueError('Invalid value for minimum_pixels: [{0}]'.format(
             minimum_pixels
         ))
